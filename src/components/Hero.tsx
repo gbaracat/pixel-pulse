@@ -21,15 +21,15 @@ export function Hero() {
           className="max-w-2xl space-y-6"
         >
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-neon-pink/10 border border-neon-pink/40 text-neon-pink text-xs font-display">
-            <Sparkles className="size-3" /> NEW WAVE · PIXEL ART
+            <Sparkles className="size-3" /> RETRÔ · MODERNO · COMPETITIVO
           </div>
           <h1 className="font-display text-3xl sm:text-5xl lg:text-6xl leading-[1.15] text-glow-purple">
-            Descubra jogos<br />
-            que marcaram<br />
-            <span className="text-neon-pink text-glow-pink">gerações.</span>
+            Do arcade dos<br />
+            anos 80 ao<br />
+            <span className="text-neon-pink text-glow-pink">topo do ranking.</span>
           </h1>
           <p className="text-base sm:text-lg text-muted-foreground max-w-xl">
-            Uma plataforma feita para fãs de pixel art, arcades e indies. Recomendações pelo seu humor, estilo e nostalgia.
+            Pixel art, indies, AAA e os maiores competitivos do mundo num só lugar. Recomendações pelo seu humor, estilo e ritmo.
           </p>
           <div className="flex flex-wrap gap-3">
             <Link

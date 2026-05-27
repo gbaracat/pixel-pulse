@@ -14,6 +14,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as DiscoverRouteImport } from './routes/discover'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as GamesIdRouteImport } from './routes/games.$id'
+import { Route as CategoriesSlugRouteImport } from './routes/categories.$slug'
 
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
@@ -40,12 +41,18 @@ const GamesIdRoute = GamesIdRouteImport.update({
   path: '/games/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CategoriesSlugRoute = CategoriesSlugRouteImport.update({
+  id: '/categories/$slug',
+  path: '/categories/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/discover': typeof DiscoverRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
+  '/categories/$slug': typeof CategoriesSlugRoute
   '/games/$id': typeof GamesIdRoute
 }
 export interface FileRoutesByTo {
@@ -53,6 +60,7 @@ export interface FileRoutesByTo {
   '/discover': typeof DiscoverRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
+  '/categories/$slug': typeof CategoriesSlugRoute
   '/games/$id': typeof GamesIdRoute
 }
 export interface FileRoutesById {
@@ -61,14 +69,34 @@ export interface FileRoutesById {
   '/discover': typeof DiscoverRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
+  '/categories/$slug': typeof CategoriesSlugRoute
   '/games/$id': typeof GamesIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/discover' | '/login' | '/profile' | '/games/$id'
+  fullPaths:
+    | '/'
+    | '/discover'
+    | '/login'
+    | '/profile'
+    | '/categories/$slug'
+    | '/games/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/discover' | '/login' | '/profile' | '/games/$id'
-  id: '__root__' | '/' | '/discover' | '/login' | '/profile' | '/games/$id'
+  to:
+    | '/'
+    | '/discover'
+    | '/login'
+    | '/profile'
+    | '/categories/$slug'
+    | '/games/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/discover'
+    | '/login'
+    | '/profile'
+    | '/categories/$slug'
+    | '/games/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -76,6 +104,7 @@ export interface RootRouteChildren {
   DiscoverRoute: typeof DiscoverRoute
   LoginRoute: typeof LoginRoute
   ProfileRoute: typeof ProfileRoute
+  CategoriesSlugRoute: typeof CategoriesSlugRoute
   GamesIdRoute: typeof GamesIdRoute
 }
 
@@ -116,6 +145,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GamesIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/categories/$slug': {
+      id: '/categories/$slug'
+      path: '/categories/$slug'
+      fullPath: '/categories/$slug'
+      preLoaderRoute: typeof CategoriesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -124,6 +160,7 @@ const rootRouteChildren: RootRouteChildren = {
   DiscoverRoute: DiscoverRoute,
   LoginRoute: LoginRoute,
   ProfileRoute: ProfileRoute,
+  CategoriesSlugRoute: CategoriesSlugRoute,
   GamesIdRoute: GamesIdRoute,
 }
 export const routeTree = rootRouteImport

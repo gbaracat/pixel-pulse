@@ -22,7 +22,8 @@ function Index() {
       <div className="space-y-12 -mt-16 relative z-10 pb-16">
         {rows.map((r) => (
           <GameRow
-            key={r.title}
+            key={r.slug}
+            slug={r.slug}
             title={r.title}
             games={r.ids.map((id) => getGame(id)!).filter(Boolean)}
           />
