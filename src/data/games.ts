@@ -143,7 +143,6 @@ export const games: Game[] = [
     platforms: ["Arcade", "Genesis"],
     description: "Doze lutadores, infinitos combos. O ringue de néon não esquece o nome dos campeões.",
   },
-];
 
   {
     id: "harvest-hollow",
