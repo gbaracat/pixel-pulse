@@ -6,6 +6,12 @@ import g5 from "@/assets/game-5.jpg";
 import g6 from "@/assets/game-6.jpg";
 import g7 from "@/assets/game-7.jpg";
 import g8 from "@/assets/game-8.jpg";
+import g9 from "@/assets/game-9.jpg";
+import g10 from "@/assets/game-10.jpg";
+import g11 from "@/assets/game-11.jpg";
+import g12 from "@/assets/game-12.jpg";
+import g13 from "@/assets/game-13.jpg";
+import g14 from "@/assets/game-14.jpg";
 
 export type Game = {
   id: string;
