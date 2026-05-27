@@ -104,7 +104,7 @@ function GamePage() {
         <section className="space-y-3">
           <h3 className="font-display text-sm text-glow-purple">Tags</h3>
           <div className="flex flex-wrap gap-2">
-            {game.tags.map((t) => (
+            {game.tags.map((t: string) => (
               <span key={t} className="px-3 h-8 grid place-items-center rounded-full border border-neon-purple/40 text-xs text-neon-purple bg-neon-purple/10">
                 #{t}
               </span>
