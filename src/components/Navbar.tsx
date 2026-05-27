@@ -1,5 +1,7 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { Search, User, Gamepad2, LogOut } from "lucide-react";
+import { useState, useMemo, useRef, useEffect } from "react";
+import { games } from "@/data/games";
 import { useAuth } from "@/hooks/use-auth";
 import {
   DropdownMenu,
