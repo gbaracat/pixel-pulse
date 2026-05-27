@@ -2,7 +2,7 @@ export function Footer() {
   return (
     <footer className="border-t border-border/40 mt-24">
       <div className="mx-auto max-w-7xl px-6 py-10 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div className="font-display text-xs text-glow-purple">PIXEL<span className="text-neon-cyan">STORE</span> © 2026</div>
+        <div className="font-display text-xs text-glow-purple"><span>PIXEL</span><span className="text-neon-cyan">STORE</span> <span>© 2026</span></div>
         <div className="text-xs text-muted-foreground font-mono-pixel text-base">
           INSERT COIN TO CONTINUE...
         </div>
