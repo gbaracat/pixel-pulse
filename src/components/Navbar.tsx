@@ -9,7 +9,10 @@ export function Navbar() {
           <div className="size-8 rounded-md grid place-items-center bg-gradient-to-br from-neon-purple to-neon-pink glow-purple">
             <Gamepad2 className="size-4 text-background" />
           </div>
-          <span className="font-display text-xs sm:text-sm text-glow-pink">PIXEL<span className="text-neon-cyan">STORE</span></span>
+          <span className="font-display text-xs sm:text-sm text-glow-pink">
+            <span>PIXEL</span>
+            <span className="text-neon-cyan">STORE</span>
+          </span>
         </Link>
 
         <nav className="hidden md:flex items-center gap-7 text-sm text-muted-foreground">
