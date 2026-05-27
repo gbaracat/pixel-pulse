@@ -11,6 +11,8 @@ import {
 import appCss from "../styles.css?url";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { AuthProvider } from "@/hooks/use-auth";
+import { Toaster } from "sonner";
 
 function NotFoundComponent() {
   return (
@@ -115,13 +117,16 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="min-h-screen flex flex-col">
-        <Navbar />
-        <main className="flex-1 pt-0">
-          <Outlet />
-        </main>
-        <Footer />
-      </div>
+      <AuthProvider>
+        <div className="min-h-screen flex flex-col">
+          <Navbar />
+          <main className="flex-1 pt-0">
+            <Outlet />
+          </main>
+          <Footer />
+        </div>
+        <Toaster theme="dark" position="top-right" />
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
