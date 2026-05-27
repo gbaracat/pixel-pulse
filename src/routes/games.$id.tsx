@@ -1,8 +1,9 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { Star, Clock, Heart, Plus, Play, ArrowLeft } from "lucide-react";
+import { Star, Clock, Play, ArrowLeft } from "lucide-react";
 import { getGame, games } from "@/data/games";
 import { GameCard } from "@/components/GameCard";
+import { GameActions } from "@/components/GameActions";
 
 export const Route = createFileRoute("/games/$id")({
   loader: ({ params }) => {
@@ -70,12 +71,9 @@ function GamePage() {
               <button className="inline-flex items-center gap-2 px-5 h-11 rounded-md bg-gradient-to-r from-neon-purple to-neon-pink text-background font-semibold glow-pink">
                 <Play className="size-4 fill-current" /> Ver Trailer
               </button>
-              <button className="inline-flex items-center gap-2 px-5 h-11 rounded-md bg-secondary/80 border border-border hover:border-neon-cyan hover:text-neon-cyan transition">
-                <Plus className="size-4" /> Adicionar à Lista
-              </button>
-              <button className="inline-flex items-center justify-center size-11 rounded-md bg-secondary/80 border border-border hover:border-neon-pink hover:text-neon-pink transition">
-                <Heart className="size-4" />
-              </button>
+            </div>
+            <div className="pt-2">
+              <GameActions gameId={game.id} />
             </div>
           </motion.div>
         </div>
