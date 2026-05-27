@@ -40,9 +40,9 @@ export const Route = createFileRoute("/categories/$slug")({
 const PAGE_SIZE = 12;
 
 function CategoryPage() {
-  const { category } = Route.useLoaderData();
+  const { category } = Route.useLoaderData() as { category: import("@/data/games").Category };
   const allGames = useMemo(
-    () => category.ids.map((id) => getGame(id)!).filter(Boolean),
+    () => category.ids.map((id: string) => getGame(id)!).filter(Boolean),
     [category]
   );
 
