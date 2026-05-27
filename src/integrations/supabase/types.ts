@@ -14,7 +14,60 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      game_lists: {
+        Row: {
+          created_at: string
+          game_id: string
+          id: string
+          status: Database["public"]["Enums"]["list_status"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          game_id: string
+          id?: string
+          status: Database["public"]["Enums"]["list_status"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          game_id?: string
+          id?: string
+          status?: Database["public"]["Enums"]["list_status"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string
+          display_name: string | null
+          id: string
+          updated_at: string
+          username: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          display_name?: string | null
+          id: string
+          updated_at?: string
+          username?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          updated_at?: string
+          username?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +76,12 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      list_status:
+        | "favorite"
+        | "playing"
+        | "completed"
+        | "wishlist"
+        | "abandoned"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +208,14 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      list_status: [
+        "favorite",
+        "playing",
+        "completed",
+        "wishlist",
+        "abandoned",
+      ],
+    },
   },
 } as const
