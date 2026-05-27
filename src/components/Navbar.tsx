@@ -71,13 +71,45 @@ export function Navbar() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <div className="hidden sm:flex items-center gap-2 px-3 h-9 rounded-full bg-secondary/60 border border-border/60 w-56">
-            <Search className="size-4 text-muted-foreground" />
-            <input
-              placeholder="Buscar jogo, gênero..."
-              className="bg-transparent text-sm outline-none w-full placeholder:text-muted-foreground/60"
-            />
+          <div ref={searchRef} className="hidden sm:block relative">
+            <div className={`flex items-center gap-2 px-3 h-9 rounded-full bg-secondary/60 border w-56 transition ${open && query ? "border-neon-pink glow-pink" : "border-border/60"}`}>
+              <Search className="size-4 text-muted-foreground" />
+              <input
+                value={query}
+                onChange={(e) => { setQuery(e.target.value); setOpen(true); }}
+                onFocus={() => setOpen(true)}
+                onKeyDown={(e) => { if (e.key === "Enter") submitSearch(); if (e.key === "Escape") setOpen(false); }}
+                placeholder="Buscar jogo, gênero..."
+                className="bg-transparent text-sm outline-none w-full placeholder:text-muted-foreground/60"
+              />
+            </div>
+            {open && query && (
+              <div className="absolute top-11 right-0 w-80 max-h-96 overflow-y-auto rounded-xl border border-border bg-background/95 backdrop-blur-xl shadow-2xl z-50">
+                {results.length === 0 ? (
+                  <div className="p-4 text-sm text-muted-foreground text-center">Nenhum jogo encontrado.</div>
+                ) : (
+                  <ul className="py-2">
+                    {results.map((g) => (
+                      <li key={g.id}>
+                        <button
+                          onClick={() => { navigate({ to: "/games/$id", params: { id: g.id } }); setQuery(""); setOpen(false); }}
+                          className="w-full flex items-center gap-3 px-3 py-2 hover:bg-secondary/60 transition text-left"
+                        >
+                          <img src={g.cover} alt="" className="size-10 rounded object-cover" />
+                          <div className="flex-1 min-w-0">
+                            <div className="text-sm font-medium truncate">{g.title}</div>
+                            <div className="text-[11px] text-muted-foreground">{g.genre} · {g.year}</div>
+                          </div>
+                          <div className="text-xs font-display text-neon-cyan">{g.rating}</div>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            )}
           </div>
+
 
           {user ? (
             <DropdownMenu>
