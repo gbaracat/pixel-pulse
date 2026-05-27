@@ -41,8 +41,8 @@ const PAGE_SIZE = 12;
 
 function CategoryPage() {
   const { category } = Route.useLoaderData() as { category: import("@/data/games").Category };
-  const allGames = useMemo(
-    () => category.ids.map((id: string) => getGame(id)!).filter(Boolean),
+  const allGames = useMemo<Game[]>(
+    () => category.ids.map((id: string) => getGame(id)).filter((g): g is Game => Boolean(g)),
     [category]
   );
 
