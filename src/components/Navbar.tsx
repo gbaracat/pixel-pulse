@@ -15,11 +15,39 @@ import {
 export function Navbar() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+  const [query, setQuery] = useState("");
+  const [open, setOpen] = useState(false);
+  const searchRef = useRef<HTMLDivElement>(null);
   const initials = (user?.user_metadata?.full_name || user?.email || "P1")
     .toString()
     .slice(0, 2)
     .toUpperCase();
   const avatarUrl = user?.user_metadata?.avatar_url as string | undefined;
+
+  const results = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return [];
+    return games
+      .filter((g) => `${g.title} ${g.genre} ${g.tags.join(" ")}`.toLowerCase().includes(q))
+      .slice(0, 6);
+  }, [query]);
+
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", onClick);
+    return () => document.removeEventListener("mousedown", onClick);
+  }, []);
+
+  const submitSearch = () => {
+    if (results[0]) {
+      navigate({ to: "/games/$id", params: { id: results[0].id } });
+      setQuery("");
+      setOpen(false);
+    }
+  };
+
 
   return (
     <header className="fixed top-0 inset-x-0 z-50 backdrop-blur-xl bg-background/60 border-b border-border/40">
