@@ -3,8 +3,14 @@ import { motion } from "framer-motion";
 import { Star, Clock } from "lucide-react";
 import type { Game } from "@/data/games";
 import { GameActions } from "./GameActions";
+import { useEnrichedGame } from "@/hooks/use-enriched-games";
 
 export function GameCard({ game, large = false }: { game: Game; large?: boolean }) {
+  const enriched = useEnrichedGame(game.id);
+  const cover = enriched?.cover || game.cover;
+  const rating = enriched?.rating ?? game.rating;
+  const year = enriched?.year ?? game.year;
+  const genre = enriched?.genres?.[0] || game.genre;
   return (
     <Link
       to="/games/$id"
@@ -17,7 +23,7 @@ export function GameCard({ game, large = false }: { game: Game; large?: boolean 
         className="relative overflow-hidden rounded-xl border border-border/60 bg-card aspect-[3/4]"
       >
         <img
-          src={game.cover}
+          src={cover}
           alt={game.title}
           loading="lazy"
           className="absolute inset-0 size-full object-cover transition-transform duration-500 group-hover:scale-110"
@@ -33,7 +39,7 @@ export function GameCard({ game, large = false }: { game: Game; large?: boolean 
 
         <div className="absolute top-2 left-2 flex items-center gap-1 px-2 py-1 rounded-md bg-background/80 backdrop-blur text-[10px] font-display text-neon-cyan">
           <Star className="size-3 fill-current" />
-          {game.rating.toFixed(1)}
+          {rating.toFixed(1)}
         </div>
 
         <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition">
@@ -41,7 +47,7 @@ export function GameCard({ game, large = false }: { game: Game; large?: boolean 
         </div>
 
         <div className="absolute bottom-0 inset-x-0 p-3 space-y-1">
-          <div className="text-[10px] font-display text-neon-pink uppercase tracking-wider">{game.genre} · {game.year}</div>
+          <div className="text-[10px] font-display text-neon-pink uppercase tracking-wider">{genre} · {year}</div>
           <div className="font-semibold text-sm leading-tight line-clamp-2">{game.title}</div>
           <div className="flex items-center gap-1 text-[11px] text-muted-foreground">
             <Clock className="size-3" /> {game.hours}h
