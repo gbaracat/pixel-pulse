@@ -38,6 +38,78 @@ export type Database = {
         }
         Relationships: []
       }
+      games: {
+        Row: {
+          background_image: string | null
+          cover: string | null
+          created_at: string
+          description: string | null
+          difficulty: string | null
+          era: string | null
+          featured: boolean
+          genres: Json
+          id: string
+          mood: Json
+          platforms: Json
+          playtime: number | null
+          rating: number | null
+          rawg_id: number | null
+          screenshots: Json
+          slug: string
+          tags: Json
+          title: string
+          trailer_url: string | null
+          updated_at: string
+          year: number | null
+        }
+        Insert: {
+          background_image?: string | null
+          cover?: string | null
+          created_at?: string
+          description?: string | null
+          difficulty?: string | null
+          era?: string | null
+          featured?: boolean
+          genres?: Json
+          id?: string
+          mood?: Json
+          platforms?: Json
+          playtime?: number | null
+          rating?: number | null
+          rawg_id?: number | null
+          screenshots?: Json
+          slug: string
+          tags?: Json
+          title: string
+          trailer_url?: string | null
+          updated_at?: string
+          year?: number | null
+        }
+        Update: {
+          background_image?: string | null
+          cover?: string | null
+          created_at?: string
+          description?: string | null
+          difficulty?: string | null
+          era?: string | null
+          featured?: boolean
+          genres?: Json
+          id?: string
+          mood?: Json
+          platforms?: Json
+          playtime?: number | null
+          rating?: number | null
+          rawg_id?: number | null
+          screenshots?: Json
+          slug?: string
+          tags?: Json
+          title?: string
+          trailer_url?: string | null
+          updated_at?: string
+          year?: number | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
