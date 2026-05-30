@@ -3,8 +3,14 @@ import { motion } from "framer-motion";
 import { Star, Clock } from "lucide-react";
 import type { Game } from "@/data/games";
 import { GameActions } from "./GameActions";
+import { useEnrichedGame } from "@/hooks/use-enriched-games";
 
 export function GameCard({ game, large = false }: { game: Game; large?: boolean }) {
+  const enriched = useEnrichedGame(game.id);
+  const cover = enriched?.cover || game.cover;
+  const rating = enriched?.rating ?? game.rating;
+  const year = enriched?.year ?? game.year;
+  const genre = enriched?.genres?.[0] || game.genre;
   return (
     <Link
       to="/games/$id"
@@ -17,7 +23,7 @@ export function GameCard({ game, large = false }: { game: Game; large?: boolean 
         className="relative overflow-hidden rounded-xl border border-border/60 bg-card aspect-[3/4]"
       >
         <img
-          src={game.cover}
+          src={cover}
           alt={game.title}
           loading="lazy"
           className="absolute inset-0 size-full object-cover transition-transform duration-500 group-hover:scale-110"
