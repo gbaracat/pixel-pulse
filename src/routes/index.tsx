@@ -1,7 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useRef } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { Hero } from "@/components/Hero";
 import { GameRow } from "@/components/GameRow";
 import { rows, games, getGame } from "@/data/games";
+import { useEnrichedGames } from "@/hooks/use-enriched-games";
+import { syncAllGames } from "@/lib/sync-rawg.functions";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/")({
   head: () => ({
