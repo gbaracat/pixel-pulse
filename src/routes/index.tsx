@@ -22,6 +22,28 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const { data: enriched, refetch } = useEnrichedGames();
+  const syncFn = useServerFn(syncAllGames);
+  const triggered = useRef(false);
+  const sync = useMutation({
+    mutationFn: () => syncFn({ data: {} }),
+    onSuccess: (res) => {
+      toast.success(`Sincronizado: ${res.ok}/${res.total} jogos da RAWG`);
+      refetch();
+    },
+    onError: (e) => toast.error(`Falha ao sincronizar: ${e instanceof Error ? e.message : "erro"}`),
+  });
+
+  // Auto-trigger sync once if DB is empty
+  useEffect(() => {
+    if (triggered.current) return;
+    if (enriched && Object.keys(enriched).length === 0 && !sync.isPending) {
+      triggered.current = true;
+      toast.info("Carregando dados reais dos jogos...");
+      sync.mutate();
+    }
+  }, [enriched, sync]);
+
   return (
     <div>
       <Hero />
