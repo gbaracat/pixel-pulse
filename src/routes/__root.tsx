@@ -76,14 +76,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
+      { title: "Pixel Store" },
+      { name: "description", content: "Pixel Pulse is a modern game discovery platform for retro and pixel art titles." },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { property: "og:title", content: "Pixel Store" },
+      { property: "og:description", content: "Pixel Pulse is a modern game discovery platform for retro and pixel art titles." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "Pixel Store" },
+      { name: "twitter:description", content: "Pixel Pulse is a modern game discovery platform for retro and pixel art titles." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/a835d4c2-42c4-4ee0-b3e7-5c426332d02b/id-preview-e2e8fc19--ad793277-6c41-45b0-a81a-07523ba41d8d.lovable.app-1780257013907.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/a835d4c2-42c4-4ee0-b3e7-5c426332d02b/id-preview-e2e8fc19--ad793277-6c41-45b0-a81a-07523ba41d8d.lovable.app-1780257013907.png" },
     ],
     links: [
       {
