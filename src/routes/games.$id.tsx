@@ -201,15 +201,25 @@ function GamePage() {
               </button>
               <div className="relative aspect-video rounded-2xl overflow-hidden border border-neon-pink/40 glow-pink bg-black">
                 {trailer ? (
-                  <video
-                    src={trailer}
-                    controls
-                    autoPlay
-                    poster={cover}
-                    className="size-full object-contain bg-black"
-                  >
-                    Seu navegador não suporta vídeo HTML5.
-                  </video>
+                  /\.(mp4|webm|ogg)(\?|$)/i.test(trailer) ? (
+                    <video
+                      src={trailer}
+                      controls
+                      autoPlay
+                      poster={cover}
+                      className="size-full object-contain bg-black"
+                    >
+                      Seu navegador não suporta vídeo HTML5.
+                    </video>
+                  ) : (
+                    <iframe
+                      src={trailer}
+                      title={`${game.title} trailer`}
+                      allow="autoplay; encrypted-media; picture-in-picture"
+                      allowFullScreen
+                      className="size-full"
+                    />
+                  )
                 ) : (
                   <div className="size-full grid place-items-center text-center px-6">
                     <div className="space-y-3">
