@@ -149,6 +149,12 @@ export const categories: Category[] = [
     ids: ["fortnite", "warzone", "apex-legends"],
   },
   {
+    slug: "iconic-retro",
+    title: "Clássicos Eternos",
+    subtitle: "Os jogos que marcaram gerações",
+    ids: ["super-mario-bros", "super-mario-world", "sonic-the-hedgehog", "sonic-2", "zelda-link-to-the-past", "chrono-trigger", "castlevania-symphony-of-the-night", "mega-man-x", "street-fighter-ii", "mortal-kombat", "donkey-kong-country", "contra", "metal-slug", "pac-man", "space-invaders", "final-fantasy-vi", "pokemon-red-blue", "earthbound"],
+  },
+  {
     slug: "retro-classics",
     title: "Retrô Clássicos",
     subtitle: "Direto dos anos 80 e 90",
