@@ -94,12 +94,22 @@ function GamePage() {
             </div>
 
             <div className="flex flex-wrap gap-3 pt-2">
-              <button
-                onClick={() => setTrailerOpen(true)}
-                className="inline-flex items-center gap-2 px-5 h-11 rounded-md bg-gradient-to-r from-neon-purple to-neon-pink text-background font-semibold glow-pink hover:scale-105 transition"
-              >
-                <Play className="size-4 fill-current" /> Ver Trailer
-              </button>
+              {hasTrailer ? (
+                <button
+                  onClick={() => setTrailerOpen(true)}
+                  className="inline-flex items-center gap-2 px-5 h-11 rounded-md bg-gradient-to-r from-neon-purple to-neon-pink text-background font-semibold glow-pink hover:scale-105 transition"
+                >
+                  <Play className="size-4 fill-current" /> Ver Trailer
+                </button>
+              ) : (
+                <div
+                  className="inline-flex items-center gap-2 px-5 h-11 rounded-md bg-secondary/60 border border-border text-muted-foreground text-sm font-display"
+                  title="Sem trailer cadastrado na planilha"
+                >
+                  <VideoOff className="size-4" />
+                  {trailerLoading ? "Carregando trailer..." : "Trailer indisponível"}
+                </div>
+              )}
             </div>
             <div className="pt-2">
               <GameActions gameId={game.id} />
