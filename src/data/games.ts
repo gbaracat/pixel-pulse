@@ -70,6 +70,45 @@ export const games: Game[] = [
   { id: "destiny-2", title: "Destiny 2", cover: modScifi, rating: 8.5, genre: "FPS / Looter", year: 2017, hours: 500, difficulty: "medium", era: "modern", mood: ["competitivo", "história"], tags: ["FPS", "MMO", "Looter", "Coop", "F2P"], platforms: ["PC", "PS5", "Xbox"], description: "Gunplay sensacional, raids épicas e expansões que reescrevem o universo." },
   { id: "rocket-league", title: "Rocket League", cover: modSports, rating: 9.2, genre: "Sports", year: 2015, hours: 200, difficulty: "medium", era: "modern", mood: ["competitivo", "relaxar"], tags: ["Sports", "Carros", "Multiplayer", "Esports", "F2P"], platforms: ["PC", "PS5", "Xbox", "Switch"], description: "Futebol com carros foguete. Simples de aprender, impossível de dominar." },
   { id: "ea-fc", title: "EA Sports FC 24", cover: modSports, rating: 8.0, genre: "Sports", year: 2023, hours: 200, difficulty: "medium", era: "modern", mood: ["competitivo", "relaxar"], tags: ["Sports", "Futebol", "Multiplayer", "Manager"], platforms: ["PC", "PS5", "Xbox", "Switch"], description: "O futebol mais realista do mundo dos games. Ultimate Team e clubes do planeta inteiro." },
+
+  // ============= MODERNOS ADICIONAIS (REAIS) =============
+  { id: "roblox", title: "Roblox", cover: modSandbox, rating: 8.2, genre: "Sandbox / UGC", year: 2006, hours: 500, difficulty: "easy", era: "modern", mood: ["relaxar", "competitivo"], tags: ["UGC", "Multiplayer", "F2P", "Sandbox"], platforms: ["PC", "Xbox", "Mobile"], description: "Plataforma de jogos criados por usuários com milhões de experiências online." },
+  { id: "red-dead-redemption-2", title: "Red Dead Redemption 2", cover: modOpenWorld, rating: 9.7, genre: "Open World", year: 2018, hours: 80, difficulty: "medium", era: "modern", mood: ["história"], tags: ["Open World", "Faroeste", "Rockstar", "Singleplayer"], platforms: ["PC", "PS5", "Xbox"], description: "Arthur Morgan e a gangue Van der Linde em um épico cinematográfico do velho oeste." },
+  { id: "cyberpunk-2077", title: "Cyberpunk 2077", cover: modScifi, rating: 8.6, genre: "RPG Open World", year: 2020, hours: 60, difficulty: "medium", era: "modern", mood: ["história"], tags: ["RPG", "Cyberpunk", "Open World", "CD Projekt"], platforms: ["PC", "PS5", "Xbox"], description: "Night City, mercenários e implantes cibernéticos. RPG de mundo aberto futurista da CD Projekt." },
+  { id: "baldurs-gate-3", title: "Baldur's Gate 3", cover: modSouls, rating: 9.6, genre: "CRPG", year: 2023, hours: 100, difficulty: "hard", era: "modern", mood: ["história", "desafio"], tags: ["RPG", "D&D", "Turn-based", "Larian"], platforms: ["PC", "PS5", "Xbox"], description: "RPG baseado em D&D 5e com liberdade absoluta de escolhas e combate por turnos." },
+  { id: "the-finals", title: "The Finals", cover: modTacticalFps, rating: 8.4, genre: "FPS", year: 2023, hours: 80, difficulty: "medium", era: "modern", mood: ["competitivo"], tags: ["FPS", "Multiplayer", "Destrutível", "F2P"], platforms: ["PC", "PS5", "Xbox"], description: "FPS competitivo com cenários totalmente destrutíveis em torneios de game show." },
+  { id: "genshin-impact", title: "Genshin Impact", cover: modAnimeRpg, rating: 8.5, genre: "Action RPG", year: 2020, hours: 200, difficulty: "medium", era: "modern", mood: ["história", "relaxar"], tags: ["Anime", "Open World", "Gacha", "F2P"], platforms: ["PC", "PS5", "Mobile"], description: "Mundo aberto anime com elementos elementais e dezenas de personagens jogáveis." },
+  { id: "path-of-exile", title: "Path of Exile", cover: modSouls, rating: 8.7, genre: "ARPG", year: 2013, hours: 300, difficulty: "hard", era: "modern", mood: ["desafio"], tags: ["ARPG", "Looter", "F2P", "Online"], platforms: ["PC", "PS5", "Xbox"], description: "ARPG sombrio com árvore de habilidades gigantesca e ligas sazonais." },
+  { id: "diablo-iv", title: "Diablo IV", cover: modSouls, rating: 8.3, genre: "ARPG", year: 2023, hours: 80, difficulty: "medium", era: "modern", mood: ["desafio", "história"], tags: ["ARPG", "Looter", "Blizzard"], platforms: ["PC", "PS5", "Xbox"], description: "O retorno gótico de Diablo com Lilith e o Santuário em chamas." },
+  { id: "helldivers-2", title: "Helldivers 2", cover: modScifi, rating: 9.0, genre: "Shooter Cooperativo", year: 2024, hours: 100, difficulty: "hard", era: "modern", mood: ["competitivo", "desafio"], tags: ["Co-op", "Shooter", "Sci-fi", "PvE"], platforms: ["PC", "PS5"], description: "Espalhe a democracia gerenciada em squads de 4 contra bugs alienígenas e robôs." },
+  { id: "black-myth-wukong", title: "Black Myth: Wukong", cover: modSouls, rating: 9.0, genre: "Action RPG", year: 2024, hours: 40, difficulty: "hard", era: "modern", mood: ["desafio", "história"], tags: ["Souls-like", "Mitologia", "Singleplayer"], platforms: ["PC", "PS5"], description: "Action RPG baseado em 'Jornada ao Oeste' com combate refinado e visuais deslumbrantes." },
+
+  // ============= INDIES / PIXEL ART (REAIS) =============
+  { id: "stardew-valley", title: "Stardew Valley", cover: modSandbox, rating: 9.5, genre: "Farming Sim", year: 2016, hours: 200, difficulty: "easy", era: "modern", mood: ["relaxar"], tags: ["Indie", "Pixel Art", "Farming", "Cozy"], platforms: ["PC", "PS5", "Xbox", "Switch", "Mobile"], description: "Herde uma fazenda e construa sua vida ideal no vilarejo de Pelican Town." },
+  { id: "terraria", title: "Terraria", cover: modSandbox, rating: 9.3, genre: "Sandbox", year: 2011, hours: 150, difficulty: "medium", era: "modern", mood: ["relaxar", "desafio"], tags: ["Indie", "Pixel Art", "Sandbox", "Co-op"], platforms: ["PC", "PS5", "Xbox", "Switch", "Mobile"], description: "Aventura sandbox 2D com mineração, construção e dezenas de bosses." },
+  { id: "hollow-knight", title: "Hollow Knight", cover: modSouls, rating: 9.6, genre: "Metroidvania", year: 2017, hours: 40, difficulty: "hard", era: "modern", mood: ["desafio", "história"], tags: ["Indie", "Metroidvania", "Souls-like"], platforms: ["PC", "PS5", "Xbox", "Switch"], description: "Explore o reino subterrâneo de Hallownest neste Metroidvania aclamado." },
+  { id: "celeste", title: "Celeste", cover: modSouls, rating: 9.5, genre: "Platformer", year: 2018, hours: 12, difficulty: "hard", era: "modern", mood: ["desafio"], tags: ["Indie", "Pixel Art", "Platformer"], platforms: ["PC", "PS5", "Xbox", "Switch"], description: "Ajude Madeline a escalar a montanha Celeste em um precision platformer emocionante." },
+  { id: "dead-cells", title: "Dead Cells", cover: modSouls, rating: 9.2, genre: "Roguelike", year: 2018, hours: 50, difficulty: "hard", era: "modern", mood: ["desafio"], tags: ["Indie", "Roguelike", "Pixel Art", "Metroidvania"], platforms: ["PC", "PS5", "Xbox", "Switch"], description: "Roguelite de ação fluida com combate rápido e progressão permanente." },
+  { id: "sea-of-stars", title: "Sea of Stars", cover: modAnimeRpg, rating: 9.0, genre: "JRPG", year: 2023, hours: 30, difficulty: "medium", era: "modern", mood: ["história"], tags: ["Indie", "JRPG", "Pixel Art"], platforms: ["PC", "PS5", "Xbox", "Switch"], description: "JRPG inspirado nos clássicos 16-bit com combate por turnos e arte deslumbrante." },
+  { id: "katana-zero", title: "Katana ZERO", cover: modSouls, rating: 9.0, genre: "Action", year: 2019, hours: 6, difficulty: "hard", era: "modern", mood: ["desafio"], tags: ["Indie", "Pixel Art", "Neo-noir"], platforms: ["PC", "PS5", "Xbox", "Switch"], description: "Samurai neo-noir com combate em tempo bullet e narrativa fragmentada." },
+  { id: "hyper-light-drifter", title: "Hyper Light Drifter", cover: modSouls, rating: 8.7, genre: "Action RPG", year: 2016, hours: 12, difficulty: "hard", era: "modern", mood: ["desafio", "história"], tags: ["Indie", "Pixel Art", "Action RPG"], platforms: ["PC", "PS5", "Xbox", "Switch"], description: "Aventura silenciosa em um mundo decadente com combate preciso e arte vibrante." },
+  { id: "the-messenger", title: "The Messenger", cover: modSouls, rating: 8.8, genre: "Action Platformer", year: 2018, hours: 15, difficulty: "medium", era: "modern", mood: ["desafio"], tags: ["Indie", "Ninja", "Pixel Art", "Metroidvania"], platforms: ["PC", "PS5", "Xbox", "Switch"], description: "Comece como homenagem 8-bit ao Ninja Gaiden e se transforme em um Metroidvania 16-bit." },
+  { id: "eastward", title: "Eastward", cover: modAnimeRpg, rating: 8.6, genre: "Action Adventure", year: 2021, hours: 25, difficulty: "medium", era: "modern", mood: ["história"], tags: ["Indie", "Pixel Art", "Aventura"], platforms: ["PC", "Switch", "PS5"], description: "Uma jornada pixel art entre um mineiro e uma garota misteriosa em um mundo apocalíptico." },
+  { id: "vampire-survivors", title: "Vampire Survivors", cover: modSouls, rating: 9.1, genre: "Roguelite", year: 2022, hours: 50, difficulty: "easy", era: "modern", mood: ["relaxar", "desafio"], tags: ["Indie", "Roguelite", "Bullet Heaven"], platforms: ["PC", "PS5", "Xbox", "Switch", "Mobile"], description: "Sobreviva contra hordas crescentes com builds explosivas. O jogo que criou um gênero." },
+  { id: "dave-the-diver", title: "Dave the Diver", cover: modAnimeRpg, rating: 9.0, genre: "Adventure / Sim", year: 2023, hours: 30, difficulty: "easy", era: "modern", mood: ["relaxar"], tags: ["Indie", "Pixel Art", "Sim"], platforms: ["PC", "PS5", "Switch", "Mobile"], description: "Mergulhe de dia, gerencie um sushi bar à noite. Híbrido charmoso e viciante." },
+  { id: "blasphemous", title: "Blasphemous", cover: modSouls, rating: 8.7, genre: "Metroidvania", year: 2019, hours: 20, difficulty: "hard", era: "modern", mood: ["desafio", "história"], tags: ["Indie", "Pixel Art", "Souls-like"], platforms: ["PC", "PS5", "Xbox", "Switch"], description: "Metroidvania sombrio inspirado em iconografia religiosa espanhola com combate brutal." },
+  { id: "undertale", title: "Undertale", cover: modAnimeRpg, rating: 9.5, genre: "RPG", year: 2015, hours: 8, difficulty: "medium", era: "modern", mood: ["história"], tags: ["Indie", "Pixel Art", "Cult", "RPG"], platforms: ["PC", "PS5", "Xbox", "Switch"], description: "Você não precisa matar ninguém. Um RPG indie que redefiniu narrativa em games." },
+  { id: "omori", title: "OMORI", cover: modAnimeRpg, rating: 9.2, genre: "RPG", year: 2020, hours: 25, difficulty: "medium", era: "modern", mood: ["história"], tags: ["Indie", "Psychological", "Pixel Art"], platforms: ["PC", "PS5", "Xbox", "Switch"], description: "RPG psicológico que mergulha em traumas, amizade e a fronteira entre sonho e realidade." },
+  { id: "enter-the-gungeon", title: "Enter the Gungeon", cover: modSouls, rating: 8.6, genre: "Roguelike", year: 2016, hours: 30, difficulty: "hard", era: "modern", mood: ["desafio"], tags: ["Indie", "Bullet Hell", "Roguelike"], platforms: ["PC", "PS5", "Xbox", "Switch"], description: "Bullet hell roguelike onde balas atiram balas em masmorras infinitas." },
+  { id: "moonlighter", title: "Moonlighter", cover: modSouls, rating: 8.3, genre: "Action RPG", year: 2018, hours: 25, difficulty: "medium", era: "modern", mood: ["relaxar"], tags: ["Indie", "Pixel Art", "Roguelite"], platforms: ["PC", "PS5", "Xbox", "Switch"], description: "De dia comerciante, de noite aventureiro. Loot, venda e suba seu vilarejo." },
+  { id: "risk-of-rain-returns", title: "Risk of Rain Returns", cover: modSouls, rating: 8.9, genre: "Roguelike", year: 2023, hours: 30, difficulty: "hard", era: "modern", mood: ["desafio", "competitivo"], tags: ["Indie", "Roguelike", "Co-op", "Pixel Art"], platforms: ["PC", "Switch"], description: "Remake definitivo do clássico roguelike 2D com co-op online e novos sobreviventes." },
+
+  // ============= RETRÔ ADICIONAIS (REAIS) =============
+  { id: "sonic-3-knuckles", title: "Sonic 3 & Knuckles", cover: hero, rating: 9.4, genre: "Platformer", year: 1994, hours: 10, difficulty: "medium", era: "retro", mood: ["competitivo", "história"], tags: ["Sonic", "Sega", "Genesis"], platforms: ["Genesis"], description: "O auge do Sonic 16-bit. Lock-on com o cartucho de Sonic & Knuckles criou uma aventura épica." },
+  { id: "mega-man-x4", title: "Mega Man X4", cover: hero, rating: 9.0, genre: "Action Platformer", year: 1997, hours: 8, difficulty: "hard", era: "retro", mood: ["desafio"], tags: ["Mega Man", "Capcom", "PS1"], platforms: ["PS1", "Saturn"], description: "X e Zero em campanhas separadas. Animações em estilo anime e trilha sonora memorável." },
+  { id: "metal-slug-x", title: "Metal Slug X", cover: hero, rating: 9.2, genre: "Run and Gun", year: 1999, hours: 5, difficulty: "hard", era: "retro", mood: ["desafio", "competitivo"], tags: ["SNK", "Neo Geo", "Co-op", "Pixel Art"], platforms: ["Neo Geo", "Arcade"], description: "Versão aprimorada de Metal Slug 2 com novos inimigos, armas e fluidez incomparável." },
+  { id: "donkey-kong", title: "Donkey Kong", cover: hero, rating: 8.9, genre: "Arcade", year: 1981, hours: 2, difficulty: "hard", era: "retro", mood: ["competitivo", "desafio"], tags: ["Nintendo", "Arcade", "Miyamoto"], platforms: ["Arcade"], description: "O arcade que apresentou Mario (então Jumpman) ao mundo. Salve a Pauline do gigante DK." },
+  { id: "pokemon-yellow", title: "Pokémon Yellow", cover: hero, rating: 9.2, genre: "JRPG", year: 1998, hours: 35, difficulty: "easy", era: "retro", mood: ["história", "relaxar"], tags: ["Pokémon", "Game Boy", "Nintendo"], platforms: ["Game Boy"], description: "Versão especial inspirada no anime: comece com Pikachu que te segue por Kanto." },
 ];
 
 export const getGame = (id: string) => games.find((g) => g.id === id);
@@ -136,19 +175,31 @@ export const categories: Category[] = [
     slug: "sega-classics",
     title: "Clássicos da Sega",
     subtitle: "Atitude azul em alta velocidade",
-    ids: ["sonic-the-hedgehog", "sonic-2"],
+    ids: ["sonic-the-hedgehog", "sonic-2", "sonic-3-knuckles"],
   },
   {
     slug: "pixel-art-classic",
     title: "Pixel Art Clássica",
     subtitle: "O auge da arte 2D",
-    ids: ["metal-slug", "castlevania-symphony-of-the-night", "chrono-trigger", "final-fantasy-vi", "super-metroid"],
+    ids: ["metal-slug", "metal-slug-x", "castlevania-symphony-of-the-night", "chrono-trigger", "final-fantasy-vi", "super-metroid"],
   },
   {
     slug: "most-influential",
     title: "Jogos Mais Influentes da História",
     subtitle: "O DNA de tudo que veio depois",
-    ids: ["super-mario-bros", "pac-man", "space-invaders", "street-fighter-ii", "zelda-link-to-the-past", "sonic-the-hedgehog", "final-fantasy-vi", "castlevania-symphony-of-the-night"],
+    ids: ["super-mario-bros", "pac-man", "space-invaders", "street-fighter-ii", "zelda-link-to-the-past", "sonic-the-hedgehog", "final-fantasy-vi", "castlevania-symphony-of-the-night", "donkey-kong"],
+  },
+  {
+    slug: "pokemon-saga",
+    title: "Saga Pokémon",
+    subtitle: "Gotta catch 'em all",
+    ids: ["pokemon-red-blue", "pokemon-yellow"],
+  },
+  {
+    slug: "capcom-legends",
+    title: "Lendas da Capcom",
+    subtitle: "Mestres do action e da luta",
+    ids: ["street-fighter-ii", "mega-man-x", "mega-man-x4"],
   },
 
   // ---------- DESCOBRIR (MODERNO) ----------
@@ -156,25 +207,25 @@ export const categories: Category[] = [
     slug: "trending",
     title: "Em Alta Agora",
     subtitle: "Os jogos mais quentes do momento",
-    ids: ["valorant", "elden-ring", "marvel-rivals", "fortnite", "cs2", "minecraft", "gta-v"],
+    ids: ["valorant", "elden-ring", "marvel-rivals", "fortnite", "cs2", "minecraft", "gta-v", "helldivers-2", "black-myth-wukong", "baldurs-gate-3", "the-finals"],
   },
   {
     slug: "competitive",
     title: "Competitivos",
     subtitle: "Para quem joga para vencer",
-    ids: ["valorant", "cs2", "league-of-legends", "rocket-league", "rainbow-six-siege", "apex-legends", "overwatch-2", "ea-fc", "marvel-rivals"],
+    ids: ["valorant", "cs2", "league-of-legends", "rocket-league", "rainbow-six-siege", "apex-legends", "overwatch-2", "ea-fc", "marvel-rivals", "the-finals"],
   },
   {
     slug: "multiplayer",
     title: "Multiplayer Online",
     subtitle: "Melhor com amigos (ou rivais)",
-    ids: ["fortnite", "minecraft", "warzone", "rocket-league", "destiny-2", "ea-fc", "marvel-rivals", "overwatch-2"],
+    ids: ["fortnite", "minecraft", "warzone", "rocket-league", "destiny-2", "ea-fc", "marvel-rivals", "overwatch-2", "helldivers-2", "roblox", "terraria"],
   },
   {
     slug: "modern-aaa",
     title: "AAA Modernos",
     subtitle: "Produções que definiram a geração",
-    ids: ["elden-ring", "gta-v", "destiny-2", "valorant", "cs2"],
+    ids: ["elden-ring", "gta-v", "destiny-2", "valorant", "cs2", "red-dead-redemption-2", "cyberpunk-2077", "baldurs-gate-3", "black-myth-wukong"],
   },
   {
     slug: "battle-royale",
@@ -182,18 +233,60 @@ export const categories: Category[] = [
     subtitle: "Último de pé leva tudo",
     ids: ["fortnite", "warzone", "apex-legends"],
   },
+  {
+    slug: "open-world",
+    title: "Mundos Abertos",
+    subtitle: "Para se perder por dezenas de horas",
+    ids: ["gta-v", "red-dead-redemption-2", "cyberpunk-2077", "elden-ring", "genshin-impact", "minecraft"],
+  },
+  {
+    slug: "rpg-modern",
+    title: "RPGs Modernos",
+    subtitle: "Builds, escolhas e mundos vastos",
+    ids: ["baldurs-gate-3", "elden-ring", "cyberpunk-2077", "diablo-iv", "path-of-exile", "genshin-impact", "black-myth-wukong"],
+  },
+  {
+    slug: "indie-gems",
+    title: "Pérolas Indies",
+    subtitle: "Estúdios pequenos, ideias gigantes",
+    ids: ["stardew-valley", "hollow-knight", "celeste", "dead-cells", "undertale", "vampire-survivors", "dave-the-diver", "sea-of-stars"],
+  },
+  {
+    slug: "pixel-art-modern",
+    title: "Pixel Art Moderno",
+    subtitle: "A arte 2D que não envelhece",
+    ids: ["stardew-valley", "celeste", "dead-cells", "katana-zero", "hyper-light-drifter", "the-messenger", "blasphemous", "eastward", "omori", "sea-of-stars"],
+  },
+  {
+    slug: "metroidvanias",
+    title: "Metroidvanias",
+    subtitle: "Exploração, segredos e habilidades",
+    ids: ["hollow-knight", "blasphemous", "dead-cells", "the-messenger", "castlevania-symphony-of-the-night", "super-metroid"],
+  },
+  {
+    slug: "roguelikes",
+    title: "Roguelikes & Roguelites",
+    subtitle: "Cada run é uma nova história",
+    ids: ["dead-cells", "vampire-survivors", "enter-the-gungeon", "risk-of-rain-returns", "moonlighter"],
+  },
+  {
+    slug: "cozy-games",
+    title: "Cozy & Relaxar",
+    subtitle: "Para desestressar com calma",
+    ids: ["stardew-valley", "dave-the-diver", "moonlighter", "minecraft", "terraria"],
+  },
 ];
 
 export const getCategory = (slug: string) => categories.find((c) => c.slug === slug);
 
 // Home só com categorias retrô
 export const retroCategories = categories.filter((c) =>
-  ["most-played-history", "arcade-classics", "snes-legends", "genesis-legends", "ps1-best", "rpgs-eternal", "revolutionary", "nintendo-classics", "sega-classics", "pixel-art-classic", "most-influential"].includes(c.slug)
+  ["most-played-history", "arcade-classics", "snes-legends", "genesis-legends", "ps1-best", "rpgs-eternal", "revolutionary", "nintendo-classics", "sega-classics", "pixel-art-classic", "most-influential", "pokemon-saga", "capcom-legends"].includes(c.slug)
 );
 
 // Descobrir só com categorias modernas
 export const modernCategories = categories.filter((c) =>
-  ["trending", "competitive", "multiplayer", "modern-aaa", "battle-royale"].includes(c.slug)
+  ["trending", "competitive", "multiplayer", "modern-aaa", "battle-royale", "open-world", "rpg-modern", "indie-gems", "pixel-art-modern", "metroidvanias", "roguelikes", "cozy-games"].includes(c.slug)
 );
 
 // Backwards-compat
