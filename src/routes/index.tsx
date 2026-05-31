@@ -34,12 +34,13 @@ function Index() {
     onError: (e) => toast.error(`Falha ao sincronizar: ${e instanceof Error ? e.message : "erro"}`),
   });
 
-  // Auto-trigger sync once if DB is empty
+  // Auto-trigger sync if DB is missing entries from the catalog
   useEffect(() => {
-    if (triggered.current) return;
-    if (enriched && Object.keys(enriched).length === 0 && !sync.isPending) {
+    if (triggered.current || !enriched || sync.isPending) return;
+    const missing = games.filter((g) => !enriched[g.id]).length;
+    if (missing > 0) {
       triggered.current = true;
-      toast.info("Carregando dados reais dos jogos...");
+      toast.info(`Carregando dados reais de ${missing} jogos...`);
       sync.mutate();
     }
   }, [enriched, sync]);
