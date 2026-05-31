@@ -6,6 +6,7 @@ import { getGame, games } from "@/data/games";
 import { GameCard } from "@/components/GameCard";
 import { GameActions } from "@/components/GameActions";
 import { useEnrichedGame } from "@/hooks/use-enriched-games";
+import { useTrailer, toEmbedUrl } from "@/hooks/use-trailer";
 
 export const Route = createFileRoute("/games/$id")({
   loader: ({ params }) => {
@@ -54,7 +55,9 @@ function GamePage() {
   const platforms = enriched?.platforms?.length ? enriched.platforms : game.platforms;
   const description = enriched?.description || game.description;
   const screenshots = enriched?.screenshots ?? [];
-  const trailer = enriched?.trailer_url ?? null;
+  const { data: trailerData, isLoading: trailerLoading } = useTrailer(game.title);
+  const trailer = toEmbedUrl(trailerData?.link);
+  const hasTrailer = !!trailer;
 
   const similar = games.filter((g) => g.id !== game.id && g.genre === game.genre).slice(0, 4);
   const fallback = games.filter((g) => g.id !== game.id).slice(0, 4);
