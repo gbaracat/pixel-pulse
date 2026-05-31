@@ -35,13 +35,17 @@ export async function rawgSearch(query: string): Promise<RawgGame | null> {
 
 export async function rawgDetails(id: number): Promise<RawgGame | null> {
   const key = getKey();
-  const [details, screens] = await Promise.all([
+  const [details, screens, movies] = await Promise.all([
     fetch(`${RAWG_BASE}/games/${id}?key=${key}`).then((r) => (r.ok ? r.json() : null)),
     fetch(`${RAWG_BASE}/games/${id}/screenshots?key=${key}`).then((r) => (r.ok ? r.json() : null)),
+    fetch(`${RAWG_BASE}/games/${id}/movies?key=${key}`).then((r) => (r.ok ? r.json() : null)),
   ]);
   if (!details) return null;
+  const firstMovie = movies?.results?.[0];
+  const trailer = firstMovie?.data?.max ?? firstMovie?.data?.["480"] ?? null;
   return {
     ...details,
-    short_screenshots: screens?.results?.slice(0, 6).map((s: { image: string }) => ({ image: s.image })) ?? [],
+    short_screenshots: screens?.results?.slice(0, 8).map((s: { image: string }) => ({ image: s.image })) ?? [],
+    clip: trailer ? { clip: trailer } : details.clip ?? null,
   };
 }
