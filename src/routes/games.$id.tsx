@@ -6,6 +6,7 @@ import { getGame, games } from "@/data/games";
 import { GameCard } from "@/components/GameCard";
 import { GameActions } from "@/components/GameActions";
 import { useEnrichedGame } from "@/hooks/use-enriched-games";
+import { useTrailer, toEmbedUrl } from "@/hooks/use-trailer";
 
 export const Route = createFileRoute("/games/$id")({
   loader: ({ params }) => {
@@ -54,7 +55,9 @@ function GamePage() {
   const platforms = enriched?.platforms?.length ? enriched.platforms : game.platforms;
   const description = enriched?.description || game.description;
   const screenshots = enriched?.screenshots ?? [];
-  const trailer = enriched?.trailer_url ?? null;
+  const { data: trailerData, isLoading: trailerLoading } = useTrailer(game.title);
+  const trailer = toEmbedUrl(trailerData?.link);
+  const hasTrailer = !!trailer;
 
   const similar = games.filter((g) => g.id !== game.id && g.genre === game.genre).slice(0, 4);
   const fallback = games.filter((g) => g.id !== game.id).slice(0, 4);
@@ -91,12 +94,22 @@ function GamePage() {
             </div>
 
             <div className="flex flex-wrap gap-3 pt-2">
-              <button
-                onClick={() => setTrailerOpen(true)}
-                className="inline-flex items-center gap-2 px-5 h-11 rounded-md bg-gradient-to-r from-neon-purple to-neon-pink text-background font-semibold glow-pink hover:scale-105 transition"
-              >
-                <Play className="size-4 fill-current" /> Ver Trailer
-              </button>
+              {hasTrailer ? (
+                <button
+                  onClick={() => setTrailerOpen(true)}
+                  className="inline-flex items-center gap-2 px-5 h-11 rounded-md bg-gradient-to-r from-neon-purple to-neon-pink text-background font-semibold glow-pink hover:scale-105 transition"
+                >
+                  <Play className="size-4 fill-current" /> Ver Trailer
+                </button>
+              ) : (
+                <div
+                  className="inline-flex items-center gap-2 px-5 h-11 rounded-md bg-secondary/60 border border-border text-muted-foreground text-sm font-display"
+                  title="Sem trailer cadastrado na planilha"
+                >
+                  <VideoOff className="size-4" />
+                  {trailerLoading ? "Carregando trailer..." : "Trailer indisponível"}
+                </div>
+              )}
             </div>
             <div className="pt-2">
               <GameActions gameId={game.id} />
@@ -188,15 +201,25 @@ function GamePage() {
               </button>
               <div className="relative aspect-video rounded-2xl overflow-hidden border border-neon-pink/40 glow-pink bg-black">
                 {trailer ? (
-                  <video
-                    src={trailer}
-                    controls
-                    autoPlay
-                    poster={cover}
-                    className="size-full object-contain bg-black"
-                  >
-                    Seu navegador não suporta vídeo HTML5.
-                  </video>
+                  /\.(mp4|webm|ogg)(\?|$)/i.test(trailer) ? (
+                    <video
+                      src={trailer}
+                      controls
+                      autoPlay
+                      poster={cover}
+                      className="size-full object-contain bg-black"
+                    >
+                      Seu navegador não suporta vídeo HTML5.
+                    </video>
+                  ) : (
+                    <iframe
+                      src={trailer}
+                      title={`${game.title} trailer`}
+                      allow="autoplay; encrypted-media; picture-in-picture"
+                      allowFullScreen
+                      className="size-full"
+                    />
+                  )
                 ) : (
                   <div className="size-full grid place-items-center text-center px-6">
                     <div className="space-y-3">
