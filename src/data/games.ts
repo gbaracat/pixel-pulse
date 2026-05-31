@@ -175,19 +175,31 @@ export const categories: Category[] = [
     slug: "sega-classics",
     title: "Clássicos da Sega",
     subtitle: "Atitude azul em alta velocidade",
-    ids: ["sonic-the-hedgehog", "sonic-2"],
+    ids: ["sonic-the-hedgehog", "sonic-2", "sonic-3-knuckles"],
   },
   {
     slug: "pixel-art-classic",
     title: "Pixel Art Clássica",
     subtitle: "O auge da arte 2D",
-    ids: ["metal-slug", "castlevania-symphony-of-the-night", "chrono-trigger", "final-fantasy-vi", "super-metroid"],
+    ids: ["metal-slug", "metal-slug-x", "castlevania-symphony-of-the-night", "chrono-trigger", "final-fantasy-vi", "super-metroid"],
   },
   {
     slug: "most-influential",
     title: "Jogos Mais Influentes da História",
     subtitle: "O DNA de tudo que veio depois",
-    ids: ["super-mario-bros", "pac-man", "space-invaders", "street-fighter-ii", "zelda-link-to-the-past", "sonic-the-hedgehog", "final-fantasy-vi", "castlevania-symphony-of-the-night"],
+    ids: ["super-mario-bros", "pac-man", "space-invaders", "street-fighter-ii", "zelda-link-to-the-past", "sonic-the-hedgehog", "final-fantasy-vi", "castlevania-symphony-of-the-night", "donkey-kong"],
+  },
+  {
+    slug: "pokemon-saga",
+    title: "Saga Pokémon",
+    subtitle: "Gotta catch 'em all",
+    ids: ["pokemon-red-blue", "pokemon-yellow"],
+  },
+  {
+    slug: "capcom-legends",
+    title: "Lendas da Capcom",
+    subtitle: "Mestres do action e da luta",
+    ids: ["street-fighter-ii", "mega-man-x", "mega-man-x4"],
   },
 
   // ---------- DESCOBRIR (MODERNO) ----------
@@ -195,25 +207,25 @@ export const categories: Category[] = [
     slug: "trending",
     title: "Em Alta Agora",
     subtitle: "Os jogos mais quentes do momento",
-    ids: ["valorant", "elden-ring", "marvel-rivals", "fortnite", "cs2", "minecraft", "gta-v"],
+    ids: ["valorant", "elden-ring", "marvel-rivals", "fortnite", "cs2", "minecraft", "gta-v", "helldivers-2", "black-myth-wukong", "baldurs-gate-3", "the-finals"],
   },
   {
     slug: "competitive",
     title: "Competitivos",
     subtitle: "Para quem joga para vencer",
-    ids: ["valorant", "cs2", "league-of-legends", "rocket-league", "rainbow-six-siege", "apex-legends", "overwatch-2", "ea-fc", "marvel-rivals"],
+    ids: ["valorant", "cs2", "league-of-legends", "rocket-league", "rainbow-six-siege", "apex-legends", "overwatch-2", "ea-fc", "marvel-rivals", "the-finals"],
   },
   {
     slug: "multiplayer",
     title: "Multiplayer Online",
     subtitle: "Melhor com amigos (ou rivais)",
-    ids: ["fortnite", "minecraft", "warzone", "rocket-league", "destiny-2", "ea-fc", "marvel-rivals", "overwatch-2"],
+    ids: ["fortnite", "minecraft", "warzone", "rocket-league", "destiny-2", "ea-fc", "marvel-rivals", "overwatch-2", "helldivers-2", "roblox", "terraria"],
   },
   {
     slug: "modern-aaa",
     title: "AAA Modernos",
     subtitle: "Produções que definiram a geração",
-    ids: ["elden-ring", "gta-v", "destiny-2", "valorant", "cs2"],
+    ids: ["elden-ring", "gta-v", "destiny-2", "valorant", "cs2", "red-dead-redemption-2", "cyberpunk-2077", "baldurs-gate-3", "black-myth-wukong"],
   },
   {
     slug: "battle-royale",
@@ -221,18 +233,60 @@ export const categories: Category[] = [
     subtitle: "Último de pé leva tudo",
     ids: ["fortnite", "warzone", "apex-legends"],
   },
+  {
+    slug: "open-world",
+    title: "Mundos Abertos",
+    subtitle: "Para se perder por dezenas de horas",
+    ids: ["gta-v", "red-dead-redemption-2", "cyberpunk-2077", "elden-ring", "genshin-impact", "minecraft"],
+  },
+  {
+    slug: "rpg-modern",
+    title: "RPGs Modernos",
+    subtitle: "Builds, escolhas e mundos vastos",
+    ids: ["baldurs-gate-3", "elden-ring", "cyberpunk-2077", "diablo-iv", "path-of-exile", "genshin-impact", "black-myth-wukong"],
+  },
+  {
+    slug: "indie-gems",
+    title: "Pérolas Indies",
+    subtitle: "Estúdios pequenos, ideias gigantes",
+    ids: ["stardew-valley", "hollow-knight", "celeste", "dead-cells", "undertale", "vampire-survivors", "dave-the-diver", "sea-of-stars"],
+  },
+  {
+    slug: "pixel-art-modern",
+    title: "Pixel Art Moderno",
+    subtitle: "A arte 2D que não envelhece",
+    ids: ["stardew-valley", "celeste", "dead-cells", "katana-zero", "hyper-light-drifter", "the-messenger", "blasphemous", "eastward", "omori", "sea-of-stars"],
+  },
+  {
+    slug: "metroidvanias",
+    title: "Metroidvanias",
+    subtitle: "Exploração, segredos e habilidades",
+    ids: ["hollow-knight", "blasphemous", "dead-cells", "the-messenger", "castlevania-symphony-of-the-night", "super-metroid"],
+  },
+  {
+    slug: "roguelikes",
+    title: "Roguelikes & Roguelites",
+    subtitle: "Cada run é uma nova história",
+    ids: ["dead-cells", "vampire-survivors", "enter-the-gungeon", "risk-of-rain-returns", "moonlighter", "hades-substitute-omori".replace("hades-substitute-omori", "omori")],
+  },
+  {
+    slug: "cozy-games",
+    title: "Cozy & Relaxar",
+    subtitle: "Para desestressar com calma",
+    ids: ["stardew-valley", "dave-the-diver", "moonlighter", "minecraft", "terraria"],
+  },
 ];
 
 export const getCategory = (slug: string) => categories.find((c) => c.slug === slug);
 
 // Home só com categorias retrô
 export const retroCategories = categories.filter((c) =>
-  ["most-played-history", "arcade-classics", "snes-legends", "genesis-legends", "ps1-best", "rpgs-eternal", "revolutionary", "nintendo-classics", "sega-classics", "pixel-art-classic", "most-influential"].includes(c.slug)
+  ["most-played-history", "arcade-classics", "snes-legends", "genesis-legends", "ps1-best", "rpgs-eternal", "revolutionary", "nintendo-classics", "sega-classics", "pixel-art-classic", "most-influential", "pokemon-saga", "capcom-legends"].includes(c.slug)
 );
 
 // Descobrir só com categorias modernas
 export const modernCategories = categories.filter((c) =>
-  ["trending", "competitive", "multiplayer", "modern-aaa", "battle-royale"].includes(c.slug)
+  ["trending", "competitive", "multiplayer", "modern-aaa", "battle-royale", "open-world", "rpg-modern", "indie-gems", "pixel-art-modern", "metroidvanias", "roguelikes", "cozy-games"].includes(c.slug)
 );
 
 // Backwards-compat
