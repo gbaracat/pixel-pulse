@@ -147,7 +147,7 @@ export function Hero() {
                 </Link>
                 <Link
                   to="/categories/$slug"
-                  params={{ slug: "iconic-retro" }}
+                  params={{ slug: "most-played-history" }}
                   className="inline-flex items-center gap-2 px-6 h-12 rounded-md bg-secondary/70 backdrop-blur border border-border hover:border-neon-cyan hover:text-neon-cyan transition"
                 >
                   <Gamepad2 className="size-4" /> Explorar Clássicos
