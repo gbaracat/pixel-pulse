@@ -267,7 +267,7 @@ export const categories: Category[] = [
     slug: "roguelikes",
     title: "Roguelikes & Roguelites",
     subtitle: "Cada run é uma nova história",
-    ids: ["dead-cells", "vampire-survivors", "enter-the-gungeon", "risk-of-rain-returns", "moonlighter", "hades-substitute-omori".replace("hades-substitute-omori", "omori")],
+    ids: ["dead-cells", "vampire-survivors", "enter-the-gungeon", "risk-of-rain-returns", "moonlighter"],
   },
   {
     slug: "cozy-games",
