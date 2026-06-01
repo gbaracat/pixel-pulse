@@ -117,6 +117,12 @@ export type Database = {
           created_at: string
           display_name: string | null
           id: string
+          steam_avatar_url: string | null
+          steam_id: string | null
+          steam_linked_at: string | null
+          steam_persona_name: string | null
+          steam_profile_url: string | null
+          steam_visibility: number | null
           updated_at: string
           username: string | null
         }
@@ -126,6 +132,12 @@ export type Database = {
           created_at?: string
           display_name?: string | null
           id: string
+          steam_avatar_url?: string | null
+          steam_id?: string | null
+          steam_linked_at?: string | null
+          steam_persona_name?: string | null
+          steam_profile_url?: string | null
+          steam_visibility?: number | null
           updated_at?: string
           username?: string | null
         }
@@ -135,6 +147,12 @@ export type Database = {
           created_at?: string
           display_name?: string | null
           id?: string
+          steam_avatar_url?: string | null
+          steam_id?: string | null
+          steam_linked_at?: string | null
+          steam_persona_name?: string | null
+          steam_profile_url?: string | null
+          steam_visibility?: number | null
           updated_at?: string
           username?: string | null
         }
