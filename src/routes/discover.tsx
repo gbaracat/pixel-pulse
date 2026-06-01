@@ -77,13 +77,27 @@ function Discover() {
         </div>
       )}
 
-      {/* Mood Engine */}
-      <div className="space-y-8 pt-4 border-t border-border/50">
-        <div className="space-y-1">
-          <div className="font-display text-xs text-neon-cyan">MOOD ENGINE · v2.0</div>
-          <h2 className="font-display text-xl sm:text-2xl text-glow-purple">
+      {/* Mood Engine — Recomendação Personalizada em destaque, logo após as categorias */}
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.5 }}
+        className="relative overflow-hidden rounded-3xl border border-neon-pink/30 bg-gradient-to-br from-neon-purple/10 via-card to-neon-cyan/5 p-6 sm:p-10 space-y-8 glow-pink"
+      >
+        <div className="absolute -top-24 -right-24 size-64 rounded-full bg-neon-pink/20 blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-24 -left-24 size-64 rounded-full bg-neon-cyan/20 blur-3xl pointer-events-none" />
+
+        <div className="relative space-y-2">
+          <div className="inline-flex items-center gap-2 font-display text-xs text-neon-cyan">
+            <Sparkles className="size-3" /> MOOD ENGINE · v2.0
+          </div>
+          <h2 className="font-display text-2xl sm:text-3xl text-glow-pink">
             Recomendação personalizada
           </h2>
+          <p className="text-sm text-muted-foreground max-w-xl">
+            Combine humor, dificuldade e gênero — o radar fica mais preciso a cada filtro.
+          </p>
         </div>
 
         <input
