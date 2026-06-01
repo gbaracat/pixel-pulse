@@ -279,15 +279,31 @@ export const categories: Category[] = [
 
 export const getCategory = (slug: string) => categories.find((c) => c.slug === slug);
 
-// Home só com categorias retrô
-export const retroCategories = categories.filter((c) =>
-  ["most-played-history", "arcade-classics", "snes-legends", "genesis-legends", "ps1-best", "rpgs-eternal", "revolutionary", "nintendo-classics", "sega-classics", "pixel-art-classic", "most-influential", "pokemon-saga", "capcom-legends"].includes(c.slug)
-);
+// Home: apenas as categorias retrô mais atrativas (sem redundâncias).
+// Ordem propositalmente curada — começa pelos "mais jogados", passa pelos arcades
+// e termina pelos jogos que moldaram a indústria.
+const RETRO_HOME_ORDER = [
+  "most-played-history",
+  "arcade-classics",
+  "revolutionary",
+  "most-influential",
+  "pixel-art-classic",
+];
+export const retroCategories = RETRO_HOME_ORDER
+  .map((slug) => categories.find((c) => c.slug === slug))
+  .filter((c): c is (typeof categories)[number] => Boolean(c));
 
-// Descobrir só com categorias modernas
-export const modernCategories = categories.filter((c) =>
-  ["trending", "competitive", "multiplayer", "modern-aaa", "battle-royale", "open-world", "rpg-modern", "indie-gems", "pixel-art-modern", "metroidvanias", "roguelikes", "cozy-games"].includes(c.slug)
-);
+// Descobrir: foco em descoberta de jogos modernos, sem categorias repetidas.
+const MODERN_DISCOVER_ORDER = [
+  "trending",
+  "competitive",
+  "multiplayer",
+  "modern-aaa",
+  "indie-gems",
+];
+export const modernCategories = MODERN_DISCOVER_ORDER
+  .map((slug) => categories.find((c) => c.slug === slug))
+  .filter((c): c is (typeof categories)[number] => Boolean(c));
 
 // Backwards-compat
 export const rows = retroCategories.map((c) => ({ slug: c.slug, title: c.title, ids: c.ids }));
