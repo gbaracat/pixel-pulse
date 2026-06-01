@@ -15,6 +15,8 @@ import { Route as DiscoverRouteImport } from './routes/discover'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as GamesIdRouteImport } from './routes/games.$id'
 import { Route as CategoriesSlugRouteImport } from './routes/categories.$slug'
+import { Route as AuthSteamReturnRouteImport } from './routes/auth.steam.return'
+import { Route as AuthSteamLoginRouteImport } from './routes/auth.steam.login'
 
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
@@ -46,6 +48,16 @@ const CategoriesSlugRoute = CategoriesSlugRouteImport.update({
   path: '/categories/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthSteamReturnRoute = AuthSteamReturnRouteImport.update({
+  id: '/auth/steam/return',
+  path: '/auth/steam/return',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthSteamLoginRoute = AuthSteamLoginRouteImport.update({
+  id: '/auth/steam/login',
+  path: '/auth/steam/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -54,6 +66,8 @@ export interface FileRoutesByFullPath {
   '/profile': typeof ProfileRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/games/$id': typeof GamesIdRoute
+  '/auth/steam/login': typeof AuthSteamLoginRoute
+  '/auth/steam/return': typeof AuthSteamReturnRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -62,6 +76,8 @@ export interface FileRoutesByTo {
   '/profile': typeof ProfileRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/games/$id': typeof GamesIdRoute
+  '/auth/steam/login': typeof AuthSteamLoginRoute
+  '/auth/steam/return': typeof AuthSteamReturnRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -71,6 +87,8 @@ export interface FileRoutesById {
   '/profile': typeof ProfileRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/games/$id': typeof GamesIdRoute
+  '/auth/steam/login': typeof AuthSteamLoginRoute
+  '/auth/steam/return': typeof AuthSteamReturnRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -81,6 +99,8 @@ export interface FileRouteTypes {
     | '/profile'
     | '/categories/$slug'
     | '/games/$id'
+    | '/auth/steam/login'
+    | '/auth/steam/return'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -89,6 +109,8 @@ export interface FileRouteTypes {
     | '/profile'
     | '/categories/$slug'
     | '/games/$id'
+    | '/auth/steam/login'
+    | '/auth/steam/return'
   id:
     | '__root__'
     | '/'
@@ -97,6 +119,8 @@ export interface FileRouteTypes {
     | '/profile'
     | '/categories/$slug'
     | '/games/$id'
+    | '/auth/steam/login'
+    | '/auth/steam/return'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -106,6 +130,8 @@ export interface RootRouteChildren {
   ProfileRoute: typeof ProfileRoute
   CategoriesSlugRoute: typeof CategoriesSlugRoute
   GamesIdRoute: typeof GamesIdRoute
+  AuthSteamLoginRoute: typeof AuthSteamLoginRoute
+  AuthSteamReturnRoute: typeof AuthSteamReturnRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -152,6 +178,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CategoriesSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth/steam/return': {
+      id: '/auth/steam/return'
+      path: '/auth/steam/return'
+      fullPath: '/auth/steam/return'
+      preLoaderRoute: typeof AuthSteamReturnRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/steam/login': {
+      id: '/auth/steam/login'
+      path: '/auth/steam/login'
+      fullPath: '/auth/steam/login'
+      preLoaderRoute: typeof AuthSteamLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -162,6 +202,8 @@ const rootRouteChildren: RootRouteChildren = {
   ProfileRoute: ProfileRoute,
   CategoriesSlugRoute: CategoriesSlugRoute,
   GamesIdRoute: GamesIdRoute,
+  AuthSteamLoginRoute: AuthSteamLoginRoute,
+  AuthSteamReturnRoute: AuthSteamReturnRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

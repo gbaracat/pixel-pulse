@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { SteamProfileSection } from "@/components/SteamProfileSection";
 
 export const Route = createFileRoute("/profile")({
   head: () => ({
@@ -232,6 +233,8 @@ function ProfilePage() {
         <Stat icon={<Gamepad2 className="size-5" />} label="Jogando" value={String(playingCount)} accent />
         <Stat icon={<Heart className="size-5" />} label="Favoritos" value={String(favoritesCount)} />
       </section>
+
+      <SteamProfileSection />
 
       <section className="space-y-4">
         <div className="flex gap-1 overflow-x-auto scrollbar-hide border-b border-border">
