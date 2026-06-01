@@ -234,6 +234,8 @@ function ProfilePage() {
         <Stat icon={<Heart className="size-5" />} label="Favoritos" value={String(favoritesCount)} />
       </section>
 
+      <SteamProfileSection />
+
       <section className="space-y-4">
         <div className="flex gap-1 overflow-x-auto scrollbar-hide border-b border-border">
           {tabs.map((t) => {
