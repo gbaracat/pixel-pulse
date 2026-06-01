@@ -181,7 +181,7 @@ function Discover() {
             </motion.div>
           )}
         </section>
-      </div>
+      </motion.div>
     </div>
   );
 }
