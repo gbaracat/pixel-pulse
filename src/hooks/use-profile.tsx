@@ -9,6 +9,12 @@ export type Profile = {
   username: string | null;
   bio: string | null;
   avatar_url: string | null;
+  steam_id: string | null;
+  steam_persona_name: string | null;
+  steam_avatar_url: string | null;
+  steam_profile_url: string | null;
+  steam_visibility: number | null;
+  steam_linked_at: string | null;
   created_at: string;
   updated_at: string;
 };
