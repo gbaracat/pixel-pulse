@@ -153,9 +153,7 @@ export function Hero({
                   <Play className="size-4 fill-current" /> Ver Detalhes
                 </Link>
                 <Link
-                  // @ts-expect-error route param shape is dynamic per usage
                   to={ctaLink.to}
-                  // @ts-expect-error route param shape is dynamic per usage
                   params={ctaLink.params}
                   className="inline-flex items-center gap-2 px-6 h-12 rounded-md bg-secondary/70 backdrop-blur border border-border hover:border-neon-cyan hover:text-neon-cyan transition"
                 >
