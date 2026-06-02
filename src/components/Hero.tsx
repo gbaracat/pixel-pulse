@@ -6,8 +6,7 @@ import hero from "@/assets/hero-arcade.jpg";
 import { getGame } from "@/data/games";
 import { useEnrichedGames } from "@/hooks/use-enriched-games";
 
-// Curated list of iconic retro classics for the rotating hero
-const HERO_SLUGS = [
+const RETRO_SLUGS = [
   "super-mario-bros",
   "super-mario-world",
   "sonic-the-hedgehog",
@@ -28,12 +27,24 @@ const HERO_SLUGS = [
   "earthbound",
 ];
 
-export function Hero() {
+type HeroProps = {
+  slugs?: string[];
+  badge?: string;
+  subtitle?: string;
+  ctaLink?: { to: string; params?: Record<string, string>; label: string };
+};
+
+export function Hero({
+  slugs = RETRO_SLUGS,
+  badge = "ARCADE · 8-BIT · 16-BIT · ETERNOS",
+  subtitle = "Uma viagem pelos clássicos.",
+  ctaLink = { to: "/categories/$slug", params: { slug: "most-played-history" }, label: "Explorar Clássicos" },
+}: HeroProps = {}) {
   const { data: enriched } = useEnrichedGames();
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
 
-  const slides = HERO_SLUGS.map((id) => {
+  const slides = slugs.map((id) => {
     const g = getGame(id);
     if (!g) return null;
     const e = enriched?.[id];
@@ -65,7 +76,7 @@ export function Hero() {
   if (total === 0) {
     return (
       <section className="relative min-h-[60vh] grid place-items-center">
-        <div className="text-muted-foreground font-display text-sm animate-pulse">Carregando clássicos…</div>
+        <div className="text-muted-foreground font-display text-sm animate-pulse">Carregando…</div>
       </section>
     );
   }
@@ -80,7 +91,6 @@ export function Hero() {
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      {/* Background art — cross-fades per slide */}
       <AnimatePresence mode="sync">
         <motion.img
           key={`bg-${slide.id}`}
@@ -95,18 +105,15 @@ export function Hero() {
         />
       </AnimatePresence>
 
-      {/* Overlays */}
       <div className="absolute inset-0 bg-gradient-to-r from-background via-background/85 to-background/30" />
       <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
       <div className="absolute inset-0 grid-bg opacity-25" />
-      {/* CRT scanlines stronger on hero */}
       <div className="absolute inset-0 opacity-30 mix-blend-overlay pointer-events-none [background:repeating-linear-gradient(to_bottom,transparent_0,transparent_2px,oklch(0_0_0/0.55)_3px,oklch(0_0_0/0.55)_4px)]" />
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 pt-28 sm:pt-36 pb-16 grid lg:grid-cols-[1.1fr_0.9fr] gap-10 items-center">
-        {/* LEFT: copy */}
         <div className="max-w-2xl space-y-5">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-neon-pink/10 border border-neon-pink/40 text-neon-pink text-xs font-display">
-            <Sparkles className="size-3" /> ARCADE · 8-BIT · 16-BIT · ETERNOS
+            <Sparkles className="size-3" /> {badge}
           </div>
 
           <AnimatePresence mode="wait">
@@ -129,7 +136,7 @@ export function Hero() {
               <h1 className="font-display text-3xl sm:text-5xl lg:text-6xl leading-[1.05] text-glow-purple">
                 {slide.title}
                 <span className="block text-neon-pink text-glow-pink text-xl sm:text-2xl mt-3">
-                  Uma viagem pelos clássicos.
+                  {subtitle}
                 </span>
               </h1>
 
@@ -146,17 +153,16 @@ export function Hero() {
                   <Play className="size-4 fill-current" /> Ver Detalhes
                 </Link>
                 <Link
-                  to="/categories/$slug"
-                  params={{ slug: "most-played-history" }}
+                  to={ctaLink.to}
+                  params={ctaLink.params}
                   className="inline-flex items-center gap-2 px-6 h-12 rounded-md bg-secondary/70 backdrop-blur border border-border hover:border-neon-cyan hover:text-neon-cyan transition"
                 >
-                  <Gamepad2 className="size-4" /> Explorar Clássicos
+                  <Gamepad2 className="size-4" /> {ctaLink.label}
                 </Link>
               </div>
             </motion.div>
           </AnimatePresence>
 
-          {/* Pagination dots */}
           <div className="flex items-center gap-2 pt-4">
             <button
               onClick={prev}
@@ -190,7 +196,6 @@ export function Hero() {
           </div>
         </div>
 
-        {/* RIGHT: cover art "cartridge" */}
         <div className="hidden lg:block relative">
           <AnimatePresence mode="wait">
             <motion.div
@@ -201,7 +206,6 @@ export function Hero() {
               transition={{ duration: 0.6, ease: "easeOut" }}
               className="relative mx-auto w-[300px] xl:w-[360px]"
             >
-              {/* Neon frame */}
               <div className="absolute -inset-3 rounded-2xl bg-gradient-to-br from-neon-purple via-neon-pink to-neon-cyan opacity-70 blur-xl" />
               <Link to="/games/$id" params={{ id: slide.id }} className="relative block">
                 <div className="relative overflow-hidden rounded-xl border-2 border-neon-pink/60 aspect-[3/4] bg-card shadow-[0_0_40px_oklch(0.72_0.28_350/0.45)]">
@@ -210,7 +214,6 @@ export function Hero() {
                     alt={slide.title}
                     className="absolute inset-0 size-full object-cover"
                   />
-                  {/* scanlines on cover */}
                   <div className="absolute inset-0 opacity-40 mix-blend-overlay [background:repeating-linear-gradient(to_bottom,transparent_0,transparent_2px,oklch(0_0_0/0.6)_3px,oklch(0_0_0/0.6)_4px)]" />
                   <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
                   <div className="absolute bottom-0 inset-x-0 p-4">
@@ -224,7 +227,6 @@ export function Hero() {
         </div>
       </div>
 
-      {/* bottom fade */}
       <div className="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-b from-transparent to-background" />
     </section>
   );

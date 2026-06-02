@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as RetroRouteImport } from './routes/retro'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as DiscoverRouteImport } from './routes/discover'
@@ -18,6 +19,11 @@ import { Route as CategoriesSlugRouteImport } from './routes/categories.$slug'
 import { Route as AuthSteamReturnRouteImport } from './routes/auth.steam.return'
 import { Route as AuthSteamLoginRouteImport } from './routes/auth.steam.login'
 
+const RetroRoute = RetroRouteImport.update({
+  id: '/retro',
+  path: '/retro',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
@@ -64,6 +70,7 @@ export interface FileRoutesByFullPath {
   '/discover': typeof DiscoverRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
+  '/retro': typeof RetroRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/games/$id': typeof GamesIdRoute
   '/auth/steam/login': typeof AuthSteamLoginRoute
@@ -74,6 +81,7 @@ export interface FileRoutesByTo {
   '/discover': typeof DiscoverRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
+  '/retro': typeof RetroRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/games/$id': typeof GamesIdRoute
   '/auth/steam/login': typeof AuthSteamLoginRoute
@@ -85,6 +93,7 @@ export interface FileRoutesById {
   '/discover': typeof DiscoverRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
+  '/retro': typeof RetroRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/games/$id': typeof GamesIdRoute
   '/auth/steam/login': typeof AuthSteamLoginRoute
@@ -97,6 +106,7 @@ export interface FileRouteTypes {
     | '/discover'
     | '/login'
     | '/profile'
+    | '/retro'
     | '/categories/$slug'
     | '/games/$id'
     | '/auth/steam/login'
@@ -107,6 +117,7 @@ export interface FileRouteTypes {
     | '/discover'
     | '/login'
     | '/profile'
+    | '/retro'
     | '/categories/$slug'
     | '/games/$id'
     | '/auth/steam/login'
@@ -117,6 +128,7 @@ export interface FileRouteTypes {
     | '/discover'
     | '/login'
     | '/profile'
+    | '/retro'
     | '/categories/$slug'
     | '/games/$id'
     | '/auth/steam/login'
@@ -128,6 +140,7 @@ export interface RootRouteChildren {
   DiscoverRoute: typeof DiscoverRoute
   LoginRoute: typeof LoginRoute
   ProfileRoute: typeof ProfileRoute
+  RetroRoute: typeof RetroRoute
   CategoriesSlugRoute: typeof CategoriesSlugRoute
   GamesIdRoute: typeof GamesIdRoute
   AuthSteamLoginRoute: typeof AuthSteamLoginRoute
@@ -136,6 +149,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/retro': {
+      id: '/retro'
+      path: '/retro'
+      fullPath: '/retro'
+      preLoaderRoute: typeof RetroRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/profile': {
       id: '/profile'
       path: '/profile'
@@ -200,6 +220,7 @@ const rootRouteChildren: RootRouteChildren = {
   DiscoverRoute: DiscoverRoute,
   LoginRoute: LoginRoute,
   ProfileRoute: ProfileRoute,
+  RetroRoute: RetroRoute,
   CategoriesSlugRoute: CategoriesSlugRoute,
   GamesIdRoute: GamesIdRoute,
   AuthSteamLoginRoute: AuthSteamLoginRoute,
@@ -208,13 +229,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
