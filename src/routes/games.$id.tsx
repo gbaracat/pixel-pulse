@@ -167,6 +167,8 @@ function GamePage() {
           </div>
         </section>
 
+        <CommunityReviews gameId={game.id} />
+
         <section className="space-y-4">
           <h3 className="font-display text-sm text-glow-purple">Jogos parecidos</h3>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
