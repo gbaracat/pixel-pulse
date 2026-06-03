@@ -42,7 +42,13 @@ export function useUpdateProfile() {
   const { user } = useAuth();
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (patch: { display_name?: string; bio?: string; avatar_url?: string | null }) => {
+    mutationFn: async (patch: {
+      display_name?: string | null;
+      bio?: string | null;
+      avatar_url?: string | null;
+      banner_url?: string | null;
+      favorite_game_ids?: string[];
+    }) => {
       if (!user) throw new Error("not-auth");
       const { error } = await supabase
         .from("profiles")
