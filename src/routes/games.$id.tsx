@@ -272,3 +272,28 @@ function InfoCard({ label, value, accent }: { label: string; value: string; acce
     </div>
   );
 }
+
+function CommunityReviews({ gameId }: { gameId: string }) {
+  const { data, isLoading } = useGameReviews(gameId);
+  const my = useMyReview(gameId);
+  return (
+    <section className="space-y-4">
+      <div className="flex items-baseline justify-between">
+        <h3 className="font-display text-sm text-glow-purple">Reviews da comunidade</h3>
+        {data && data.length > 0 && (
+          <span className="text-xs text-muted-foreground font-display">{data.length} REVIEW{data.length === 1 ? "" : "S"}</span>
+        )}
+      </div>
+      <ReviewForm gameId={gameId} existing={my} />
+      {isLoading && <div className="text-sm text-muted-foreground">Carregando reviews…</div>}
+      {data && data.length === 0 && (
+        <div className="text-sm text-muted-foreground italic">Seja o primeiro a publicar uma review.</div>
+      )}
+      <div className="space-y-3">
+        {data?.filter((r) => r.id !== my?.id).map((r) => (
+          <ReviewCard key={r.id} review={r} gameId={gameId} />
+        ))}
+      </div>
+    </section>
+  );
+}
