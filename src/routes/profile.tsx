@@ -521,6 +521,8 @@ function ListsPanel() {
     </div>
   );
 }
+
+function Stat({ icon, label, value, accent }: { icon: React.ReactNode; label: string; value: string; accent?: boolean }) {
   return (
     <div className={`rounded-xl border p-5 ${accent ? "border-neon-cyan/40 bg-neon-cyan/5" : "border-border bg-card"}`}>
       <div className={`size-9 rounded-md grid place-items-center mb-3 ${accent ? "bg-neon-cyan/20 text-neon-cyan" : "bg-secondary text-neon-pink"}`}>
