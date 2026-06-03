@@ -1,12 +1,14 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { Trophy, Clock, Gamepad2, Heart, LogOut, Loader2, Camera, Trash2, Save, X, Pencil } from "lucide-react";
+import { Trophy, Clock, Gamepad2, Heart, LogOut, Loader2, Camera, Trash2, Save, X, Pencil, Image as ImageIcon, Plus, ListIcon, Star, Lock, Globe } from "lucide-react";
 import { games } from "@/data/games";
 import { GameCard } from "@/components/GameCard";
 import { useAuth } from "@/hooks/use-auth";
 import { useGameLists, type ListStatus } from "@/hooks/use-game-lists";
 import { useProfile, useUpdateProfile, useUploadAvatar, useRemoveAvatar } from "@/hooks/use-profile";
+import { useUploadBanner, useRemoveBanner } from "@/hooks/use-banner";
+import { useMyLists, useCreateList, useDeleteList } from "@/hooks/use-lists";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
