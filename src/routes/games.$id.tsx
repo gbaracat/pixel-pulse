@@ -52,7 +52,8 @@ function GamePage() {
   // Always prefer real RAWG data; only fall back if enrichment hasn't loaded yet.
   const cover = enriched?.cover || game.cover;
   const banner = enriched?.background_image || enriched?.cover || game.cover;
-  const rating = enriched?.rating ?? game.rating;
+  const community = useGameRatingAvg(game.id);
+  const rating = community?.avg ?? enriched?.rating ?? game.rating;
   const year = enriched?.year ?? game.year;
   const genres = enriched?.genres?.length ? enriched.genres : [game.genre];
   const platforms = enriched?.platforms?.length ? enriched.platforms : game.platforms;
