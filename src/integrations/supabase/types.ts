@@ -113,9 +113,11 @@ export type Database = {
       profiles: {
         Row: {
           avatar_url: string | null
+          banner_url: string | null
           bio: string | null
           created_at: string
           display_name: string | null
+          favorite_game_ids: string[]
           id: string
           steam_avatar_url: string | null
           steam_id: string | null
@@ -128,9 +130,11 @@ export type Database = {
         }
         Insert: {
           avatar_url?: string | null
+          banner_url?: string | null
           bio?: string | null
           created_at?: string
           display_name?: string | null
+          favorite_game_ids?: string[]
           id: string
           steam_avatar_url?: string | null
           steam_id?: string | null
@@ -143,9 +147,11 @@ export type Database = {
         }
         Update: {
           avatar_url?: string | null
+          banner_url?: string | null
           bio?: string | null
           created_at?: string
           display_name?: string | null
+          favorite_game_ids?: string[]
           id?: string
           steam_avatar_url?: string | null
           steam_id?: string | null
@@ -241,6 +247,65 @@ export type Database = {
           game_id?: string
           id?: string
           rating?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_list_items: {
+        Row: {
+          added_at: string
+          game_id: string
+          list_id: string
+          position: number
+        }
+        Insert: {
+          added_at?: string
+          game_id: string
+          list_id: string
+          position?: number
+        }
+        Update: {
+          added_at?: string
+          game_id?: string
+          list_id?: string
+          position?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_list_items_list_id_fkey"
+            columns: ["list_id"]
+            isOneToOne: false
+            referencedRelation: "user_lists"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_lists: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          is_public: boolean
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_public?: boolean
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_public?: boolean
+          title?: string
           updated_at?: string
           user_id?: string
         }
