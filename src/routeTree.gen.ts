@@ -14,6 +14,7 @@ import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as DiscoverRouteImport } from './routes/discover'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ListsIdRouteImport } from './routes/lists.$id'
 import { Route as GamesIdRouteImport } from './routes/games.$id'
 import { Route as CategoriesSlugRouteImport } from './routes/categories.$slug'
 import { Route as AuthSteamReturnRouteImport } from './routes/auth.steam.return'
@@ -42,6 +43,11 @@ const DiscoverRoute = DiscoverRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ListsIdRoute = ListsIdRouteImport.update({
+  id: '/lists/$id',
+  path: '/lists/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GamesIdRoute = GamesIdRouteImport.update({
@@ -73,6 +79,7 @@ export interface FileRoutesByFullPath {
   '/retro': typeof RetroRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/games/$id': typeof GamesIdRoute
+  '/lists/$id': typeof ListsIdRoute
   '/auth/steam/login': typeof AuthSteamLoginRoute
   '/auth/steam/return': typeof AuthSteamReturnRoute
 }
@@ -84,6 +91,7 @@ export interface FileRoutesByTo {
   '/retro': typeof RetroRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/games/$id': typeof GamesIdRoute
+  '/lists/$id': typeof ListsIdRoute
   '/auth/steam/login': typeof AuthSteamLoginRoute
   '/auth/steam/return': typeof AuthSteamReturnRoute
 }
@@ -96,6 +104,7 @@ export interface FileRoutesById {
   '/retro': typeof RetroRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/games/$id': typeof GamesIdRoute
+  '/lists/$id': typeof ListsIdRoute
   '/auth/steam/login': typeof AuthSteamLoginRoute
   '/auth/steam/return': typeof AuthSteamReturnRoute
 }
@@ -109,6 +118,7 @@ export interface FileRouteTypes {
     | '/retro'
     | '/categories/$slug'
     | '/games/$id'
+    | '/lists/$id'
     | '/auth/steam/login'
     | '/auth/steam/return'
   fileRoutesByTo: FileRoutesByTo
@@ -120,6 +130,7 @@ export interface FileRouteTypes {
     | '/retro'
     | '/categories/$slug'
     | '/games/$id'
+    | '/lists/$id'
     | '/auth/steam/login'
     | '/auth/steam/return'
   id:
@@ -131,6 +142,7 @@ export interface FileRouteTypes {
     | '/retro'
     | '/categories/$slug'
     | '/games/$id'
+    | '/lists/$id'
     | '/auth/steam/login'
     | '/auth/steam/return'
   fileRoutesById: FileRoutesById
@@ -143,6 +155,7 @@ export interface RootRouteChildren {
   RetroRoute: typeof RetroRoute
   CategoriesSlugRoute: typeof CategoriesSlugRoute
   GamesIdRoute: typeof GamesIdRoute
+  ListsIdRoute: typeof ListsIdRoute
   AuthSteamLoginRoute: typeof AuthSteamLoginRoute
   AuthSteamReturnRoute: typeof AuthSteamReturnRoute
 }
@@ -184,6 +197,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/lists/$id': {
+      id: '/lists/$id'
+      path: '/lists/$id'
+      fullPath: '/lists/$id'
+      preLoaderRoute: typeof ListsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/games/$id': {
       id: '/games/$id'
       path: '/games/$id'
@@ -223,6 +243,7 @@ const rootRouteChildren: RootRouteChildren = {
   RetroRoute: RetroRoute,
   CategoriesSlugRoute: CategoriesSlugRoute,
   GamesIdRoute: GamesIdRoute,
+  ListsIdRoute: ListsIdRoute,
   AuthSteamLoginRoute: AuthSteamLoginRoute,
   AuthSteamReturnRoute: AuthSteamReturnRoute,
 }
