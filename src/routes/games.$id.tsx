@@ -7,6 +7,9 @@ import { GameCard } from "@/components/GameCard";
 import { GameActions } from "@/components/GameActions";
 import { useEnrichedGame } from "@/hooks/use-enriched-games";
 import { useTrailer, toEmbedUrl } from "@/hooks/use-trailer";
+import { useGameReviews, useMyReview, useGameRatingAvg } from "@/hooks/use-reviews";
+import { ReviewForm } from "@/components/ReviewForm";
+import { ReviewCard } from "@/components/ReviewCard";
 
 export const Route = createFileRoute("/games/$id")({
   loader: ({ params }) => {
@@ -49,7 +52,8 @@ function GamePage() {
   // Always prefer real RAWG data; only fall back if enrichment hasn't loaded yet.
   const cover = enriched?.cover || game.cover;
   const banner = enriched?.background_image || enriched?.cover || game.cover;
-  const rating = enriched?.rating ?? game.rating;
+  const community = useGameRatingAvg(game.id);
+  const rating = community?.avg ?? enriched?.rating ?? game.rating;
   const year = enriched?.year ?? game.year;
   const genres = enriched?.genres?.length ? enriched.genres : [game.genre];
   const platforms = enriched?.platforms?.length ? enriched.platforms : game.platforms;
@@ -163,6 +167,8 @@ function GamePage() {
           </div>
         </section>
 
+        <CommunityReviews gameId={game.id} />
+
         <section className="space-y-4">
           <h3 className="font-display text-sm text-glow-purple">Jogos parecidos</h3>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
@@ -264,5 +270,30 @@ function InfoCard({ label, value, accent }: { label: string; value: string; acce
       <div className="font-display text-[10px] text-muted-foreground uppercase">{label}</div>
       <div className={`mt-2 text-lg font-semibold ${accent ? "text-neon-cyan text-glow-cyan" : ""}`}>{value}</div>
     </div>
+  );
+}
+
+function CommunityReviews({ gameId }: { gameId: string }) {
+  const { data, isLoading } = useGameReviews(gameId);
+  const my = useMyReview(gameId);
+  return (
+    <section className="space-y-4">
+      <div className="flex items-baseline justify-between">
+        <h3 className="font-display text-sm text-glow-purple">Reviews da comunidade</h3>
+        {data && data.length > 0 && (
+          <span className="text-xs text-muted-foreground font-display">{data.length} REVIEW{data.length === 1 ? "" : "S"}</span>
+        )}
+      </div>
+      <ReviewForm gameId={gameId} existing={my} />
+      {isLoading && <div className="text-sm text-muted-foreground">Carregando reviews…</div>}
+      {data && data.length === 0 && (
+        <div className="text-sm text-muted-foreground italic">Seja o primeiro a publicar uma review.</div>
+      )}
+      <div className="space-y-3">
+        {data?.filter((r) => r.id !== my?.id).map((r) => (
+          <ReviewCard key={r.id} review={r} gameId={gameId} />
+        ))}
+      </div>
+    </section>
   );
 }
