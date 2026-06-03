@@ -7,6 +7,9 @@ import { GameCard } from "@/components/GameCard";
 import { GameActions } from "@/components/GameActions";
 import { useEnrichedGame } from "@/hooks/use-enriched-games";
 import { useTrailer, toEmbedUrl } from "@/hooks/use-trailer";
+import { useGameReviews, useMyReview, useGameRatingAvg } from "@/hooks/use-reviews";
+import { ReviewForm } from "@/components/ReviewForm";
+import { ReviewCard } from "@/components/ReviewCard";
 
 export const Route = createFileRoute("/games/$id")({
   loader: ({ params }) => {
