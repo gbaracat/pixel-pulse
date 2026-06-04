@@ -65,6 +65,7 @@ export function Navbar() {
         <nav className="hidden md:flex items-center gap-7 text-sm text-muted-foreground">
           <Link to="/" activeOptions={{ exact: true }} activeProps={{ className: "text-foreground text-glow-purple" }} className="hover:text-foreground transition">Home</Link>
           <Link to="/discover" activeProps={{ className: "text-foreground text-glow-purple" }} className="hover:text-foreground transition">Descobrir</Link>
+          <Link to="/feed" activeProps={{ className: "text-foreground text-glow-purple" }} className="hover:text-foreground transition">Feed</Link>
           <Link to="/retro" activeProps={{ className: "text-foreground text-glow-purple" }} className="hover:text-foreground transition">Retrô</Link>
           {user && (
             <Link to="/profile" activeProps={{ className: "text-foreground text-glow-purple" }} className="hover:text-foreground transition">Minha Lista</Link>
