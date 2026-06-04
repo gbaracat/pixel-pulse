@@ -12,8 +12,10 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as RetroRouteImport } from './routes/retro'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as FeedRouteImport } from './routes/feed'
 import { Route as DiscoverRouteImport } from './routes/discover'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as UUsernameRouteImport } from './routes/u.$username'
 import { Route as ListsIdRouteImport } from './routes/lists.$id'
 import { Route as GamesIdRouteImport } from './routes/games.$id'
 import { Route as CategoriesSlugRouteImport } from './routes/categories.$slug'
@@ -35,6 +37,11 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FeedRoute = FeedRouteImport.update({
+  id: '/feed',
+  path: '/feed',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DiscoverRoute = DiscoverRouteImport.update({
   id: '/discover',
   path: '/discover',
@@ -43,6 +50,11 @@ const DiscoverRoute = DiscoverRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UUsernameRoute = UUsernameRouteImport.update({
+  id: '/u/$username',
+  path: '/u/$username',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ListsIdRoute = ListsIdRouteImport.update({
@@ -74,24 +86,28 @@ const AuthSteamLoginRoute = AuthSteamLoginRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/discover': typeof DiscoverRoute
+  '/feed': typeof FeedRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/retro': typeof RetroRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/games/$id': typeof GamesIdRoute
   '/lists/$id': typeof ListsIdRoute
+  '/u/$username': typeof UUsernameRoute
   '/auth/steam/login': typeof AuthSteamLoginRoute
   '/auth/steam/return': typeof AuthSteamReturnRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/discover': typeof DiscoverRoute
+  '/feed': typeof FeedRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/retro': typeof RetroRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/games/$id': typeof GamesIdRoute
   '/lists/$id': typeof ListsIdRoute
+  '/u/$username': typeof UUsernameRoute
   '/auth/steam/login': typeof AuthSteamLoginRoute
   '/auth/steam/return': typeof AuthSteamReturnRoute
 }
@@ -99,12 +115,14 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/discover': typeof DiscoverRoute
+  '/feed': typeof FeedRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/retro': typeof RetroRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/games/$id': typeof GamesIdRoute
   '/lists/$id': typeof ListsIdRoute
+  '/u/$username': typeof UUsernameRoute
   '/auth/steam/login': typeof AuthSteamLoginRoute
   '/auth/steam/return': typeof AuthSteamReturnRoute
 }
@@ -113,36 +131,42 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/discover'
+    | '/feed'
     | '/login'
     | '/profile'
     | '/retro'
     | '/categories/$slug'
     | '/games/$id'
     | '/lists/$id'
+    | '/u/$username'
     | '/auth/steam/login'
     | '/auth/steam/return'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/discover'
+    | '/feed'
     | '/login'
     | '/profile'
     | '/retro'
     | '/categories/$slug'
     | '/games/$id'
     | '/lists/$id'
+    | '/u/$username'
     | '/auth/steam/login'
     | '/auth/steam/return'
   id:
     | '__root__'
     | '/'
     | '/discover'
+    | '/feed'
     | '/login'
     | '/profile'
     | '/retro'
     | '/categories/$slug'
     | '/games/$id'
     | '/lists/$id'
+    | '/u/$username'
     | '/auth/steam/login'
     | '/auth/steam/return'
   fileRoutesById: FileRoutesById
@@ -150,12 +174,14 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DiscoverRoute: typeof DiscoverRoute
+  FeedRoute: typeof FeedRoute
   LoginRoute: typeof LoginRoute
   ProfileRoute: typeof ProfileRoute
   RetroRoute: typeof RetroRoute
   CategoriesSlugRoute: typeof CategoriesSlugRoute
   GamesIdRoute: typeof GamesIdRoute
   ListsIdRoute: typeof ListsIdRoute
+  UUsernameRoute: typeof UUsernameRoute
   AuthSteamLoginRoute: typeof AuthSteamLoginRoute
   AuthSteamReturnRoute: typeof AuthSteamReturnRoute
 }
@@ -183,6 +209,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/feed': {
+      id: '/feed'
+      path: '/feed'
+      fullPath: '/feed'
+      preLoaderRoute: typeof FeedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/discover': {
       id: '/discover'
       path: '/discover'
@@ -195,6 +228,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/u/$username': {
+      id: '/u/$username'
+      path: '/u/$username'
+      fullPath: '/u/$username'
+      preLoaderRoute: typeof UUsernameRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/lists/$id': {
@@ -238,15 +278,27 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DiscoverRoute: DiscoverRoute,
+  FeedRoute: FeedRoute,
   LoginRoute: LoginRoute,
   ProfileRoute: ProfileRoute,
   RetroRoute: RetroRoute,
   CategoriesSlugRoute: CategoriesSlugRoute,
   GamesIdRoute: GamesIdRoute,
   ListsIdRoute: ListsIdRoute,
+  UUsernameRoute: UUsernameRoute,
   AuthSteamLoginRoute: AuthSteamLoginRoute,
   AuthSteamReturnRoute: AuthSteamReturnRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
