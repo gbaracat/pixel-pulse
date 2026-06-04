@@ -14,6 +14,60 @@ export type Database = {
   }
   public: {
     Tables: {
+      activities: {
+        Row: {
+          created_at: string
+          game_id: string | null
+          id: string
+          list_id: string | null
+          metadata: Json
+          review_id: string | null
+          target_user_id: string | null
+          type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          game_id?: string | null
+          id?: string
+          list_id?: string | null
+          metadata?: Json
+          review_id?: string | null
+          target_user_id?: string | null
+          type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          game_id?: string | null
+          id?: string
+          list_id?: string | null
+          metadata?: Json
+          review_id?: string | null
+          target_user_id?: string | null
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      follows: {
+        Row: {
+          created_at: string
+          follower_id: string
+          following_id: string
+        }
+        Insert: {
+          created_at?: string
+          follower_id: string
+          following_id: string
+        }
+        Update: {
+          created_at?: string
+          follower_id?: string
+          following_id?: string
+        }
+        Relationships: []
+      }
       game_lists: {
         Row: {
           created_at: string
