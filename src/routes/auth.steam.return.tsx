@@ -15,6 +15,7 @@ function SteamReturnPage() {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
   const link = useServerFn(linkSteamAccount);
+  const signIn = useServerFn(signInWithSteam);
   const qc = useQueryClient();
   const [status, setStatus] = useState<"working" | "ok" | "error">("working");
   const [message, setMessage] = useState("Validando resposta do Steam...");
@@ -22,10 +23,6 @@ function SteamReturnPage() {
 
   useEffect(() => {
     if (loading || ran.current) return;
-    if (!user) {
-      navigate({ to: "/login" });
-      return;
-    }
     ran.current = true;
 
     const search = new URLSearchParams(window.location.search);
@@ -40,21 +37,41 @@ function SteamReturnPage() {
       return;
     }
 
-    link({ data: { params } })
-      .then((res) => {
-        setStatus("ok");
-        setMessage(`Conectado como ${res.persona}`);
-        qc.invalidateQueries({ queryKey: ["profile"] });
-        qc.invalidateQueries({ queryKey: ["steam-library"] });
-        toast.success("Steam conectado!");
-        setTimeout(() => navigate({ to: "/profile" }), 1200);
-      })
-      .catch((e: Error) => {
-        setStatus("error");
-        setMessage(e.message || "Falha ao conectar Steam");
-        toast.error(e.message);
-      });
-  }, [loading, user, link, navigate, qc]);
+    if (user) {
+      // Authenticated: link Steam to current account
+      link({ data: { params } })
+        .then((res) => {
+          setStatus("ok");
+          setMessage(`Conectado como ${res.persona}`);
+          qc.invalidateQueries({ queryKey: ["profile"] });
+          qc.invalidateQueries({ queryKey: ["steam-library"] });
+          toast.success("Steam conectado!");
+          setTimeout(() => navigate({ to: "/profile" }), 1200);
+        })
+        .catch((e: Error) => {
+          setStatus("error");
+          setMessage(e.message || "Falha ao conectar Steam");
+          toast.error(e.message);
+        });
+    } else {
+      // Unauthenticated: Steam-only signup/sign-in flow
+      setMessage("Criando sua sessão...");
+      const redirectTo = `${window.location.origin}/profile`;
+      signIn({ data: { params, redirectTo } })
+        .then((res) => {
+          setStatus("ok");
+          setMessage(`Bem-vindo, ${res.persona}!`);
+          toast.success("Entrando via Steam...");
+          // Navigate to Supabase magic link which sets the session and redirects
+          window.location.href = res.actionLink;
+        })
+        .catch((e: Error) => {
+          setStatus("error");
+          setMessage(e.message || "Falha ao entrar com Steam");
+          toast.error(e.message);
+        });
+    }
+  }, [loading, user, link, signIn, navigate, qc]);
 
   return (
     <div className="min-h-screen pt-32 grid place-items-center px-4">
