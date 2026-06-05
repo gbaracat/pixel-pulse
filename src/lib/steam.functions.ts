@@ -41,6 +41,116 @@ export const linkSteamAccount = createServerFn({ method: "POST" })
     return { steamId, persona: summary.personaname, isPublic: summary.communityvisibilitystate === 3 };
   });
 
+const signInSchema = z.object({
+  params: z.record(z.string(), z.string()),
+  redirectTo: z.string().url(),
+});
+
+/**
+ * Steam-only signup / sign-in.
+ * Verifies Steam OpenID, finds-or-creates a Supabase auth user keyed by SteamID,
+ * upserts profile with Steam info, and returns a magic action_link the client
+ * navigates to in order to establish a session.
+ */
+export const signInWithSteam = createServerFn({ method: "POST" })
+  .inputValidator((input) => signInSchema.parse(input))
+  .handler(async ({ data }) => {
+    const steamId = await verifySteamOpenId(data.params);
+    if (!steamId) throw new Error("Falha ao verificar identidade Steam");
+
+    const summary = await fetchPlayerSummary(steamId);
+    if (!summary) throw new Error("Não foi possível carregar perfil Steam");
+
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    // 1. Find existing profile linked to this SteamID
+    const { data: existing } = await supabaseAdmin
+      .from("profiles")
+      .select("id")
+      .eq("steam_id", steamId)
+      .maybeSingle();
+
+    let userId = existing?.id as string | undefined;
+    let email: string | null = null;
+
+    if (!userId) {
+      // 2. Create new auth user
+      email = `steam_${steamId}@pixelstore.app`;
+      const randomPassword = crypto.randomUUID() + crypto.randomUUID();
+      const { data: created, error: createErr } = await supabaseAdmin.auth.admin.createUser({
+        email,
+        password: randomPassword,
+        email_confirm: true,
+        user_metadata: {
+          full_name: summary.personaname,
+          avatar_url: summary.avatarfull,
+          steam_id: steamId,
+          provider: "steam",
+        },
+      });
+      if (createErr || !created.user) {
+        throw new Error(createErr?.message ?? "Falha ao criar usuário");
+      }
+      userId = created.user.id;
+
+      // 3. Upsert profile (handle_new_user trigger may have inserted a base row)
+      const personaSlug = summary.personaname
+        .toLowerCase()
+        .replace(/[^a-z0-9]/g, "_")
+        .slice(0, 24) || `steam_${steamId.slice(-6)}`;
+      await supabaseAdmin
+        .from("profiles")
+        .upsert(
+          {
+            id: userId,
+            username: personaSlug,
+            display_name: summary.personaname,
+            avatar_url: summary.avatarfull,
+            steam_id: steamId,
+            steam_persona_name: summary.personaname,
+            steam_avatar_url: summary.avatarfull,
+            steam_profile_url: summary.profileurl,
+            steam_visibility: summary.communityvisibilitystate,
+            steam_linked_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          },
+          { onConflict: "id" },
+        );
+    } else {
+      // existing user – refresh Steam fields and fetch email for magic link
+      await supabaseAdmin
+        .from("profiles")
+        .update({
+          steam_persona_name: summary.personaname,
+          steam_avatar_url: summary.avatarfull,
+          steam_profile_url: summary.profileurl,
+          steam_visibility: summary.communityvisibilitystate,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", userId);
+
+      const { data: userRes } = await supabaseAdmin.auth.admin.getUserById(userId);
+      email = userRes.user?.email ?? null;
+      if (!email) throw new Error("Conta Steam sem email associado");
+    }
+
+    // 4. Generate magic link so the browser can establish a session
+    const { data: link, error: linkErr } = await supabaseAdmin.auth.admin.generateLink({
+      type: "magiclink",
+      email: email!,
+      options: { redirectTo: data.redirectTo },
+    });
+    if (linkErr || !link.properties?.action_link) {
+      throw new Error(linkErr?.message ?? "Falha ao gerar sessão");
+    }
+
+    return {
+      actionLink: link.properties.action_link,
+      persona: summary.personaname,
+      isPublic: summary.communityvisibilitystate === 3,
+    };
+  });
+
 export const unlinkSteamAccount = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
