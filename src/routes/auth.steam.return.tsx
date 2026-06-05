@@ -5,7 +5,7 @@ import { Loader2, CheckCircle2, XCircle } from "lucide-react";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/use-auth";
-import { linkSteamAccount } from "@/lib/steam.functions";
+import { linkSteamAccount, signInWithSteam } from "@/lib/steam.functions";
 
 export const Route = createFileRoute("/auth/steam/return")({
   component: SteamReturnPage,
