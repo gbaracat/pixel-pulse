@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Loader2, Star, ListIcon, UserPlus, Users, Globe } from "lucide-react";
+import { Loader2, Star, ListIcon, UserPlus, Users, Globe, Heart, Gamepad2, Trophy, Bookmark, XCircle } from "lucide-react";
 import { useFeed, type FeedItem, type FeedProfile } from "@/hooks/use-feed";
 import { useAuth } from "@/hooks/use-auth";
 import { games } from "@/data/games";
@@ -117,7 +117,41 @@ function FeedRow({ item, profiles }: { item: FeedItem; profiles: Map<string, Fee
       {item.kind === "review" && <ReviewItem item={item} />}
       {item.kind === "list" && <ListItem item={item} />}
       {item.kind === "follow" && <FollowItem item={item} profiles={profiles} />}
+      {item.kind === "status" && <StatusItem item={item} />}
     </li>
+  );
+}
+
+const STATUS_META: Record<string, { label: string; icon: React.ReactNode; color: string }> = {
+  favorite: { label: "favoritou", icon: <Heart className="size-4 fill-neon-pink text-neon-pink" />, color: "text-neon-pink" },
+  playing: { label: "começou a jogar", icon: <Gamepad2 className="size-4 text-neon-cyan" />, color: "text-neon-cyan" },
+  completed: { label: "terminou", icon: <Trophy className="size-4 text-neon-cyan" />, color: "text-neon-cyan" },
+  wishlist: { label: "adicionou à wishlist", icon: <Bookmark className="size-4 text-neon-purple" />, color: "text-neon-purple" },
+  abandoned: { label: "abandonou", icon: <XCircle className="size-4 text-muted-foreground" />, color: "text-muted-foreground" },
+};
+
+function StatusItem({ item }: { item: Extract<FeedItem, { kind: "status" }> }) {
+  const game = games.find((g) => g.id === item.game_id);
+  const meta = STATUS_META[item.status] ?? STATUS_META.playing;
+  return (
+    <div className="flex gap-3 items-center">
+      {game && (
+        <Link to="/games/$id" params={{ id: game.id }} className="shrink-0">
+          <img src={game.cover} alt={game.title} className="w-12 h-16 object-cover rounded-md border border-border" />
+        </Link>
+      )}
+      <div className="flex-1 min-w-0 flex items-center gap-2 text-sm">
+        {meta.icon}
+        <span className={meta.color}>{meta.label}</span>
+        {game ? (
+          <Link to="/games/$id" params={{ id: game.id }} className="font-semibold hover:text-neon-cyan truncate">
+            {game.title}
+          </Link>
+        ) : (
+          <span className="font-semibold truncate">{item.game_id}</span>
+        )}
+      </div>
+    </div>
   );
 }
 

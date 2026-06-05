@@ -155,6 +155,17 @@ function LoginPage() {
           Continuar com Google
         </button>
 
+        <a
+          href="/auth/steam/login"
+          className="mt-3 w-full h-12 rounded-lg bg-gradient-to-r from-[#1b2838] to-[#2a475e] hover:from-[#2a475e] hover:to-[#66c0f4] text-white font-medium text-sm transition inline-flex items-center justify-center gap-3 border border-[#66c0f4]/40"
+        >
+          <svg viewBox="0 0 24 24" className="size-4 text-white" fill="currentColor" aria-hidden="true">
+            <path d="M12 2C6.6 2 2.2 6.2 2 11.5l5.4 2.2c.5-.3 1-.5 1.6-.5h.2l2.4-3.5v-.1c0-2.1 1.7-3.8 3.8-3.8s3.8 1.7 3.8 3.8-1.7 3.8-3.8 3.8h-.1l-3.4 2.5v.2c0 1.6-1.3 3-3 3-1.5 0-2.7-1.1-3-2.5L2.4 14.9C3.6 19 7.4 22 12 22c5.5 0 10-4.5 10-10S17.5 2 12 2zm-2.6 15.2l-1.2-.5c.2.5.6.9 1.1 1.1.7.3 1.5.3 2.2 0 .9-.4 1.4-1.5 1-2.4-.4-1-1.4-1.4-2.4-1l1.2.5c.7.3 1 1.1.7 1.8-.3.7-1.1 1-1.8.7zm9.7-7c0-1.4-1.1-2.5-2.5-2.5s-2.5 1.1-2.5 2.5 1.1 2.5 2.5 2.5 2.5-1.1 2.5-2.5zm-4.4 0c0-1.1.9-1.9 1.9-1.9s1.9.9 1.9 1.9-.9 1.9-1.9 1.9-1.9-.9-1.9-1.9z" />
+          </svg>
+          Entrar com Steam
+        </a>
+
+
         <button
           type="button"
           onClick={() => setMode(mode === "signin" ? "signup" : "signin")}
