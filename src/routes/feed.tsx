@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Loader2, Star, ListIcon, UserPlus, Users, Globe } from "lucide-react";
+import { Loader2, Star, ListIcon, UserPlus, Users, Globe, Heart, Gamepad2, Trophy, Bookmark, XCircle } from "lucide-react";
 import { useFeed, type FeedItem, type FeedProfile } from "@/hooks/use-feed";
 import { useAuth } from "@/hooks/use-auth";
 import { games } from "@/data/games";
