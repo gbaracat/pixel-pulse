@@ -41,12 +41,13 @@ export function Navbar() {
   }, []);
 
   const submitSearch = () => {
-    if (results[0]) {
-      navigate({ to: "/games/$id", params: { id: results[0].id } });
-      setQuery("");
-      setOpen(false);
-    }
+    const q = query.trim();
+    if (!q) return;
+    navigate({ to: "/search", search: { q, tab: "games" } });
+    setQuery("");
+    setOpen(false);
   };
+
 
 
   return (
@@ -108,8 +109,15 @@ export function Navbar() {
                     ))}
                   </ul>
                 )}
+                <button
+                  onClick={submitSearch}
+                  className="w-full px-4 py-2.5 border-t border-border text-xs font-display text-neon-pink hover:bg-secondary/60 transition text-center"
+                >
+                  Ver todos os resultados de "{query}" →
+                </button>
               </div>
             )}
+
           </div>
 
 
