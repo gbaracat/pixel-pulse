@@ -30,6 +30,14 @@ export function useToggleListStatus() {
       if (on) {
         const { error } = await supabase.from("game_lists").insert({ user_id: user.id, game_id: gameId, status });
         if (error && error.code !== "23505") throw error;
+        // Log activity (best-effort)
+        const activityType = status === "favorite" ? "favorite" : "status";
+        await supabase.from("activities").insert({
+          user_id: user.id,
+          type: activityType,
+          game_id: gameId,
+          metadata: { status },
+        });
       } else {
         const { error } = await supabase.from("game_lists").delete().match({ user_id: user.id, game_id: gameId, status });
         if (error) throw error;
@@ -37,6 +45,7 @@ export function useToggleListStatus() {
     },
     onSuccess: (_d, vars) => {
       qc.invalidateQueries({ queryKey: ["game_lists", user?.id] });
+      qc.invalidateQueries({ queryKey: ["feed"] });
       const labels: Record<ListStatus, string> = {
         favorite: "Favoritos",
         playing: "Jogando",
