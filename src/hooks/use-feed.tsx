@@ -79,12 +79,33 @@ export function useFeed(scope: "global" | "following") {
         .limit(20);
       if (userFilter) followsQ.in("follower_id", userFilter);
 
-      const [reviewsR, listsR, followsR] = await Promise.all([reviewsQ, listsQ, followsQ]);
+      const activitiesQ = supabase
+        .from("activities")
+        .select("id,created_at,user_id,type,game_id,metadata")
+        .in("type", ["status", "favorite"])
+        .order("created_at", { ascending: false })
+        .limit(30);
+      if (userFilter) activitiesQ.in("user_id", userFilter);
+
+      const [reviewsR, listsR, followsR, activitiesR] = await Promise.all([reviewsQ, listsQ, followsQ, activitiesQ]);
 
       const items: FeedItem[] = [];
       (reviewsR.data ?? []).forEach((r) =>
         items.push({ kind: "review", id: r.id, created_at: r.created_at, user_id: r.user_id, game_id: r.game_id, rating: Number(r.rating), body: r.body }),
       );
+      (activitiesR.data ?? []).forEach((a) => {
+        if (!a.game_id) return;
+        const meta = (a.metadata ?? {}) as { status?: string };
+        const status = a.type === "favorite" ? "favorite" : (meta.status ?? "status");
+        items.push({
+          kind: "status",
+          id: a.id,
+          created_at: a.created_at,
+          user_id: a.user_id,
+          game_id: a.game_id,
+          status,
+        });
+      });
       (listsR.data ?? []).forEach((l) =>
         items.push({ kind: "list", id: l.id, created_at: l.created_at, user_id: l.user_id, title: l.title, description: l.description }),
       );
