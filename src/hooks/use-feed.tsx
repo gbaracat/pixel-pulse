@@ -27,6 +27,14 @@ export type FeedItem =
       created_at: string;
       user_id: string;
       target_user_id: string;
+    }
+  | {
+      kind: "status";
+      id: string;
+      created_at: string;
+      user_id: string;
+      game_id: string;
+      status: string;
     };
 
 export type FeedProfile = {
