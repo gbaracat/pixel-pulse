@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SearchRouteImport } from './routes/search'
 import { Route as RetroRouteImport } from './routes/retro'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as LoginRouteImport } from './routes/login'
@@ -22,6 +23,11 @@ import { Route as CategoriesSlugRouteImport } from './routes/categories.$slug'
 import { Route as AuthSteamReturnRouteImport } from './routes/auth.steam.return'
 import { Route as AuthSteamLoginRouteImport } from './routes/auth.steam.login'
 
+const SearchRoute = SearchRouteImport.update({
+  id: '/search',
+  path: '/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RetroRoute = RetroRouteImport.update({
   id: '/retro',
   path: '/retro',
@@ -90,6 +96,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/retro': typeof RetroRoute
+  '/search': typeof SearchRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/games/$id': typeof GamesIdRoute
   '/lists/$id': typeof ListsIdRoute
@@ -104,6 +111,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/retro': typeof RetroRoute
+  '/search': typeof SearchRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/games/$id': typeof GamesIdRoute
   '/lists/$id': typeof ListsIdRoute
@@ -119,6 +127,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/retro': typeof RetroRoute
+  '/search': typeof SearchRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/games/$id': typeof GamesIdRoute
   '/lists/$id': typeof ListsIdRoute
@@ -135,6 +144,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/profile'
     | '/retro'
+    | '/search'
     | '/categories/$slug'
     | '/games/$id'
     | '/lists/$id'
@@ -149,6 +159,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/profile'
     | '/retro'
+    | '/search'
     | '/categories/$slug'
     | '/games/$id'
     | '/lists/$id'
@@ -163,6 +174,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/profile'
     | '/retro'
+    | '/search'
     | '/categories/$slug'
     | '/games/$id'
     | '/lists/$id'
@@ -178,6 +190,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   ProfileRoute: typeof ProfileRoute
   RetroRoute: typeof RetroRoute
+  SearchRoute: typeof SearchRoute
   CategoriesSlugRoute: typeof CategoriesSlugRoute
   GamesIdRoute: typeof GamesIdRoute
   ListsIdRoute: typeof ListsIdRoute
@@ -188,6 +201,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/search': {
+      id: '/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof SearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/retro': {
       id: '/retro'
       path: '/retro'
@@ -282,6 +302,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   ProfileRoute: ProfileRoute,
   RetroRoute: RetroRoute,
+  SearchRoute: SearchRoute,
   CategoriesSlugRoute: CategoriesSlugRoute,
   GamesIdRoute: GamesIdRoute,
   ListsIdRoute: ListsIdRoute,
