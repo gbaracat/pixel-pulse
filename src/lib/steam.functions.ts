@@ -181,27 +181,54 @@ export const getSteamLibrary = createServerFn({ method: "GET" })
       .eq("id", userId)
       .maybeSingle();
 
-    if (!profile?.steam_id) return { linked: false as const };
-    const isPublic = profile.steam_visibility === 3;
+    if (!profile?.steam_id) {
+      console.log("[steam] getSteamLibrary: no steam_id linked for user", userId);
+      return { linked: false as const };
+    }
 
     const summary = await fetchPlayerSummary(profile.steam_id);
-    // Refresh visibility in case it changed since linking
     if (summary && summary.communityvisibilitystate !== profile.steam_visibility) {
       await supabase
         .from("profiles")
         .update({ steam_visibility: summary.communityvisibilitystate })
         .eq("id", userId);
     }
-    const currentlyPublic = summary ? summary.communityvisibilitystate === 3 : isPublic;
+    const currentlyPublic = summary
+      ? summary.communityvisibilitystate === 3
+      : profile.steam_visibility === 3;
+
+    if (!summary) {
+      return {
+        linked: true as const,
+        isPublic: currentlyPublic,
+        error: "Não foi possível carregar perfil Steam (API indisponível ou chave inválida).",
+      };
+    }
 
     if (!currentlyPublic) {
-      return { linked: true as const, isPublic: false as const };
+      return { linked: true as const, isPublic: false as const, gameDetailsPrivate: true as const };
     }
 
     const [owned, recent] = await Promise.all([
       fetchOwnedGames(profile.steam_id),
       fetchRecentGames(profile.steam_id),
     ]);
+
+    if (!owned) {
+      return {
+        linked: true as const,
+        isPublic: true as const,
+        error: "Falha ao buscar biblioteca na Steam Web API.",
+      };
+    }
+
+    if (owned.gameDetailsPrivate) {
+      return {
+        linked: true as const,
+        isPublic: true as const,
+        gameDetailsPrivate: true as const,
+      };
+    }
 
     const enrich = (g: { appid: number; name: string; playtime_forever: number; img_icon_url: string; playtime_2weeks?: number }) => ({
       appid: g.appid,
@@ -211,7 +238,7 @@ export const getSteamLibrary = createServerFn({ method: "GET" })
       header: steamHeaderImage(g.appid),
     });
 
-    const games = (owned ?? []).map(enrich);
+    const games = owned.games.map(enrich);
     const topPlayed = [...games].sort((a, b) => b.playtimeMinutes - a.playtimeMinutes).slice(0, 8);
     const recentList = (recent ?? []).map(enrich);
     const totalMinutes = games.reduce((s, g) => s + g.playtimeMinutes, 0);
@@ -219,6 +246,7 @@ export const getSteamLibrary = createServerFn({ method: "GET" })
     return {
       linked: true as const,
       isPublic: true as const,
+      gameDetailsPrivate: false as const,
       totalGames: games.length,
       totalMinutes,
       topPlayed,
@@ -226,3 +254,4 @@ export const getSteamLibrary = createServerFn({ method: "GET" })
       all: games,
     };
   });
+
