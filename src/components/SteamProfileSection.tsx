@@ -100,29 +100,35 @@ export function SteamProfileSection() {
               <div className="grid place-items-center py-10">
                 <Loader2 className="size-5 animate-spin text-neon-cyan" />
               </div>
-            ) : library?.linked && library.isPublic ? (
+            ) : library && "error" in library && library.error ? (
+              <div className="text-center py-8 space-y-2">
+                <Lock className="size-8 mx-auto text-neon-pink" />
+                <div className="font-display text-sm text-neon-pink">Erro ao carregar biblioteca</div>
+                <p className="text-xs text-muted-foreground max-w-md mx-auto">{library.error}</p>
+              </div>
+            ) : library?.linked && library.isPublic && library.gameDetailsPrivate === false && library.totalGames !== undefined ? (
               <div className="space-y-8">
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   <MiniStat icon={<Gamepad2 className="size-4" />} label="Jogos" value={String(library.totalGames)} />
-                  <MiniStat icon={<Clock className="size-4" />} label="Horas totais" value={formatHours(library.totalMinutes)} />
-                  <MiniStat icon={<Trophy className="size-4" />} label="Recentes" value={String(library.recent.length)} />
+                  <MiniStat icon={<Clock className="size-4" />} label="Horas totais" value={formatHours(library.totalMinutes ?? 0)} />
+                  <MiniStat icon={<Trophy className="size-4" />} label="Recentes" value={String(library.recent?.length ?? 0)} />
                 </div>
 
-                {library.recent.length > 0 && (
-                  <SteamGameRow title="Jogados recentemente" games={library.recent} showRecent />
+                {(library.recent?.length ?? 0) > 0 && (
+                  <SteamGameRow title="Jogados recentemente" games={library.recent ?? []} showRecent />
                 )}
 
-                {library.topPlayed.length > 0 && (
-                  <SteamGameRow title="Mais jogados" games={library.topPlayed} />
+                {(library.topPlayed?.length ?? 0) > 0 && (
+                  <SteamGameRow title="Mais jogados" games={library.topPlayed ?? []} />
                 )}
 
-                {library.all.length > 0 && (
+                {(library.all?.length ?? 0) > 0 && (
                   <details className="rounded-lg border border-border">
                     <summary className="cursor-pointer px-4 py-3 font-display text-xs uppercase text-muted-foreground hover:text-foreground">
-                      Biblioteca completa ({library.all.length} jogos)
+                      Biblioteca completa ({library.all?.length ?? 0} jogos)
                     </summary>
                     <div className="p-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 max-h-[600px] overflow-y-auto">
-                      {[...library.all]
+                      {[...(library.all ?? [])]
                         .sort((a, b) => b.playtimeMinutes - a.playtimeMinutes)
                         .map((g) => (
                           <SteamGameCard key={g.appid} game={g} />
@@ -131,16 +137,25 @@ export function SteamProfileSection() {
                   </details>
                 )}
               </div>
-            ) : library?.linked && library.isPublic === false ? (
+            ) : library?.linked && library.gameDetailsPrivate ? (
               <div className="text-center py-8 space-y-2">
                 <Lock className="size-8 mx-auto text-muted-foreground" />
-                <div className="font-display text-sm">Perfil Steam privado</div>
+                <div className="font-display text-sm">Detalhes dos jogos privados</div>
                 <p className="text-xs text-muted-foreground max-w-md mx-auto">
-                  Para exibir biblioteca, horas jogadas e estatísticas, altere a visibilidade do seu perfil Steam para Público.
+                  Não foi possível carregar sua biblioteca Steam. Para visualizar seus jogos na Pixel Store, torne os <strong>detalhes dos seus jogos</strong> públicos nas configurações de privacidade da Steam (Perfil → Editar perfil → Privacidade → Detalhes dos jogos: Público).
                 </p>
+                <a
+                  href="https://steamcommunity.com/my/edit/settings"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-xs text-neon-cyan hover:underline mt-2"
+                >
+                  Abrir configurações de privacidade Steam <ExternalLink className="size-3" />
+                </a>
               </div>
             ) : null}
           </div>
+
         </div>
       )}
     </motion.section>

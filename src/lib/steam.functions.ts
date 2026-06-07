@@ -246,6 +246,7 @@ export const getSteamLibrary = createServerFn({ method: "GET" })
     return {
       linked: true as const,
       isPublic: true as const,
+      gameDetailsPrivate: false as const,
       totalGames: games.length,
       totalMinutes,
       topPlayed,
@@ -253,3 +254,4 @@ export const getSteamLibrary = createServerFn({ method: "GET" })
       all: games,
     };
   });
+
