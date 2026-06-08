@@ -2,7 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, Calendar, Gamepad2, Lightbulb } from "lucide-react";
 import { GameRow } from "@/components/GameRow";
-import { DECADES, getDecade } from "@/lib/decades";
+import { DECADES, getDecade, type Decade } from "@/lib/decades";
 import { getGame, games } from "@/data/games";
 
 export const Route = createFileRoute("/decade/$slug")({
