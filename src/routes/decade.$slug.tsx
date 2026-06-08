@@ -40,7 +40,7 @@ export const Route = createFileRoute("/decade/$slug")({
 });
 
 function DecadePage() {
-  const { decade } = Route.useLoaderData() as { decade: ReturnType<typeof getDecade> & {} };
+  const { decade } = Route.useLoaderData() as { decade: Decade };
 
   // Curated highlights + any other games in the year range we may have missed.
   const highlightSet = new Set(decade.highlightGameIds);
