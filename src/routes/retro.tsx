@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { Hero } from "@/components/Hero";
 import { GameRow } from "@/components/GameRow";
+import { TimelineDecades } from "@/components/TimelineDecades";
 import { retroCategories, getGame } from "@/data/games";
 import { useEnrichedGames } from "@/hooks/use-enriched-games";
 
@@ -119,6 +120,9 @@ function RetroHub() {
           if (list.length === 0) return null;
           return <GameRow key={r.slug} slug={r.slug} title={r.title} games={list} />;
         })}
+
+        {/* ============= LINHA DO TEMPO POR DÉCADA ============= */}
+        <TimelineDecades />
 
         {/* ============= HISTÓRIA DOS VIDEOGAMES ============= */}
         <Section

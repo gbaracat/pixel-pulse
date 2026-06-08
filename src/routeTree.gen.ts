@@ -19,6 +19,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as UUsernameRouteImport } from './routes/u.$username'
 import { Route as ListsIdRouteImport } from './routes/lists.$id'
 import { Route as GamesIdRouteImport } from './routes/games.$id'
+import { Route as DecadeSlugRouteImport } from './routes/decade.$slug'
 import { Route as CategoriesSlugRouteImport } from './routes/categories.$slug'
 import { Route as AuthSteamReturnRouteImport } from './routes/auth.steam.return'
 import { Route as AuthSteamLoginRouteImport } from './routes/auth.steam.login'
@@ -73,6 +74,11 @@ const GamesIdRoute = GamesIdRouteImport.update({
   path: '/games/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DecadeSlugRoute = DecadeSlugRouteImport.update({
+  id: '/decade/$slug',
+  path: '/decade/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CategoriesSlugRoute = CategoriesSlugRouteImport.update({
   id: '/categories/$slug',
   path: '/categories/$slug',
@@ -98,6 +104,7 @@ export interface FileRoutesByFullPath {
   '/retro': typeof RetroRoute
   '/search': typeof SearchRoute
   '/categories/$slug': typeof CategoriesSlugRoute
+  '/decade/$slug': typeof DecadeSlugRoute
   '/games/$id': typeof GamesIdRoute
   '/lists/$id': typeof ListsIdRoute
   '/u/$username': typeof UUsernameRoute
@@ -113,6 +120,7 @@ export interface FileRoutesByTo {
   '/retro': typeof RetroRoute
   '/search': typeof SearchRoute
   '/categories/$slug': typeof CategoriesSlugRoute
+  '/decade/$slug': typeof DecadeSlugRoute
   '/games/$id': typeof GamesIdRoute
   '/lists/$id': typeof ListsIdRoute
   '/u/$username': typeof UUsernameRoute
@@ -129,6 +137,7 @@ export interface FileRoutesById {
   '/retro': typeof RetroRoute
   '/search': typeof SearchRoute
   '/categories/$slug': typeof CategoriesSlugRoute
+  '/decade/$slug': typeof DecadeSlugRoute
   '/games/$id': typeof GamesIdRoute
   '/lists/$id': typeof ListsIdRoute
   '/u/$username': typeof UUsernameRoute
@@ -146,6 +155,7 @@ export interface FileRouteTypes {
     | '/retro'
     | '/search'
     | '/categories/$slug'
+    | '/decade/$slug'
     | '/games/$id'
     | '/lists/$id'
     | '/u/$username'
@@ -161,6 +171,7 @@ export interface FileRouteTypes {
     | '/retro'
     | '/search'
     | '/categories/$slug'
+    | '/decade/$slug'
     | '/games/$id'
     | '/lists/$id'
     | '/u/$username'
@@ -176,6 +187,7 @@ export interface FileRouteTypes {
     | '/retro'
     | '/search'
     | '/categories/$slug'
+    | '/decade/$slug'
     | '/games/$id'
     | '/lists/$id'
     | '/u/$username'
@@ -192,6 +204,7 @@ export interface RootRouteChildren {
   RetroRoute: typeof RetroRoute
   SearchRoute: typeof SearchRoute
   CategoriesSlugRoute: typeof CategoriesSlugRoute
+  DecadeSlugRoute: typeof DecadeSlugRoute
   GamesIdRoute: typeof GamesIdRoute
   ListsIdRoute: typeof ListsIdRoute
   UUsernameRoute: typeof UUsernameRoute
@@ -271,6 +284,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GamesIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/decade/$slug': {
+      id: '/decade/$slug'
+      path: '/decade/$slug'
+      fullPath: '/decade/$slug'
+      preLoaderRoute: typeof DecadeSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/categories/$slug': {
       id: '/categories/$slug'
       path: '/categories/$slug'
@@ -304,6 +324,7 @@ const rootRouteChildren: RootRouteChildren = {
   RetroRoute: RetroRoute,
   SearchRoute: SearchRoute,
   CategoriesSlugRoute: CategoriesSlugRoute,
+  DecadeSlugRoute: DecadeSlugRoute,
   GamesIdRoute: GamesIdRoute,
   ListsIdRoute: ListsIdRoute,
   UUsernameRoute: UUsernameRoute,
