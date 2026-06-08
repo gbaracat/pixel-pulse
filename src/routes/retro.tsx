@@ -121,6 +121,9 @@ function RetroHub() {
           return <GameRow key={r.slug} slug={r.slug} title={r.title} games={list} />;
         })}
 
+        {/* ============= LINHA DO TEMPO POR DÉCADA ============= */}
+        <TimelineDecades />
+
         {/* ============= HISTÓRIA DOS VIDEOGAMES ============= */}
         <Section
           icon={<BookOpen className="size-3" />}
