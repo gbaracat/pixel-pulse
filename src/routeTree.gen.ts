@@ -16,6 +16,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as FeedRouteImport } from './routes/feed'
 import { Route as DiscoverRouteImport } from './routes/discover'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ListsIndexRouteImport } from './routes/lists.index'
 import { Route as UUsernameRouteImport } from './routes/u.$username'
 import { Route as ListsIdRouteImport } from './routes/lists.$id'
 import { Route as GamesIdRouteImport } from './routes/games.$id'
@@ -57,6 +58,11 @@ const DiscoverRoute = DiscoverRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ListsIndexRoute = ListsIndexRouteImport.update({
+  id: '/lists/',
+  path: '/lists/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const UUsernameRoute = UUsernameRouteImport.update({
@@ -108,6 +114,7 @@ export interface FileRoutesByFullPath {
   '/games/$id': typeof GamesIdRoute
   '/lists/$id': typeof ListsIdRoute
   '/u/$username': typeof UUsernameRoute
+  '/lists/': typeof ListsIndexRoute
   '/auth/steam/login': typeof AuthSteamLoginRoute
   '/auth/steam/return': typeof AuthSteamReturnRoute
 }
@@ -124,6 +131,7 @@ export interface FileRoutesByTo {
   '/games/$id': typeof GamesIdRoute
   '/lists/$id': typeof ListsIdRoute
   '/u/$username': typeof UUsernameRoute
+  '/lists': typeof ListsIndexRoute
   '/auth/steam/login': typeof AuthSteamLoginRoute
   '/auth/steam/return': typeof AuthSteamReturnRoute
 }
@@ -141,6 +149,7 @@ export interface FileRoutesById {
   '/games/$id': typeof GamesIdRoute
   '/lists/$id': typeof ListsIdRoute
   '/u/$username': typeof UUsernameRoute
+  '/lists/': typeof ListsIndexRoute
   '/auth/steam/login': typeof AuthSteamLoginRoute
   '/auth/steam/return': typeof AuthSteamReturnRoute
 }
@@ -159,6 +168,7 @@ export interface FileRouteTypes {
     | '/games/$id'
     | '/lists/$id'
     | '/u/$username'
+    | '/lists/'
     | '/auth/steam/login'
     | '/auth/steam/return'
   fileRoutesByTo: FileRoutesByTo
@@ -175,6 +185,7 @@ export interface FileRouteTypes {
     | '/games/$id'
     | '/lists/$id'
     | '/u/$username'
+    | '/lists'
     | '/auth/steam/login'
     | '/auth/steam/return'
   id:
@@ -191,6 +202,7 @@ export interface FileRouteTypes {
     | '/games/$id'
     | '/lists/$id'
     | '/u/$username'
+    | '/lists/'
     | '/auth/steam/login'
     | '/auth/steam/return'
   fileRoutesById: FileRoutesById
@@ -208,6 +220,7 @@ export interface RootRouteChildren {
   GamesIdRoute: typeof GamesIdRoute
   ListsIdRoute: typeof ListsIdRoute
   UUsernameRoute: typeof UUsernameRoute
+  ListsIndexRoute: typeof ListsIndexRoute
   AuthSteamLoginRoute: typeof AuthSteamLoginRoute
   AuthSteamReturnRoute: typeof AuthSteamReturnRoute
 }
@@ -261,6 +274,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lists/': {
+      id: '/lists/'
+      path: '/lists'
+      fullPath: '/lists/'
+      preLoaderRoute: typeof ListsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/u/$username': {
@@ -328,19 +348,10 @@ const rootRouteChildren: RootRouteChildren = {
   GamesIdRoute: GamesIdRoute,
   ListsIdRoute: ListsIdRoute,
   UUsernameRoute: UUsernameRoute,
+  ListsIndexRoute: ListsIndexRoute,
   AuthSteamLoginRoute: AuthSteamLoginRoute,
   AuthSteamReturnRoute: AuthSteamReturnRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
