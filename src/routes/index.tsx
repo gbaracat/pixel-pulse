@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { motion } from "framer-motion";
-import { ArrowRight, History, Flame, TrendingUp, Trophy, Gem, Gamepad2, Sparkles } from "lucide-react";
+import { ArrowRight, History, Flame, TrendingUp, Gamepad2, Sparkles } from "lucide-react";
 import { Hero } from "@/components/Hero";
 import { GameRow } from "@/components/GameRow";
 import { MoodAssistant } from "@/components/MoodAssistant";
