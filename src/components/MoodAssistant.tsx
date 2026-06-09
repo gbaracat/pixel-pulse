@@ -12,7 +12,7 @@ function RecCard({ rec }: { rec: Recommendation }) {
   const game = getGame(rec.gameId);
   const enriched = useEnrichedGame(rec.gameId);
   if (!game) return null;
-  const cover = enriched?.cover_url ?? game.cover;
+  const cover = enriched?.cover ?? game.cover;
   return (
     <Link
       to="/games/$id"
