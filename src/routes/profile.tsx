@@ -92,6 +92,16 @@ function ProfilePage() {
   const playingCount = byStatus("playing").length;
   const totalHours = byStatus("completed").reduce((a, g) => a + (g?.hours ?? 0), 0);
 
+  // Gênero mais jogado (entre concluídos + jogando)
+  const genreCounts = new Map<string, number>();
+  [...byStatus("completed"), ...byStatus("playing")].forEach((g) => {
+    if (g) genreCounts.set(g.genre, (genreCounts.get(g.genre) ?? 0) + 1);
+  });
+  const favoriteGenre = [...genreCounts.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] ?? "—";
+
+  // Favorito em destaque (rotaciona pelo mês para variar a Home do perfil)
+  const highlight = favoriteGames.length > 0 ? favoriteGames[new Date().getMonth() % favoriteGames.length] : null;
+
   const createdAt = profile?.created_at ? new Date(profile.created_at) : user.created_at ? new Date(user.created_at) : null;
 
   const onPickFile = (f: File | null) => {
