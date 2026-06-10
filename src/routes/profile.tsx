@@ -310,12 +310,40 @@ function ProfilePage() {
         </section>
 
         {/* ===== Stats ===== */}
-        <section className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <section className="grid grid-cols-2 sm:grid-cols-5 gap-4">
           <Stat icon={<Clock className="size-5" />} label="Horas (zerados)" value={`${totalHours}h`} />
           <Stat icon={<Trophy className="size-5" />} label="Concluídos" value={String(completedCount)} />
           <Stat icon={<Gamepad2 className="size-5" />} label="Jogando" value={String(playingCount)} accent />
           <Stat icon={<Heart className="size-5" />} label="Favoritos" value={String(favoritesCount)} />
+          <Stat icon={<Star className="size-5" />} label="Gênero favorito" value={favoriteGenre} />
         </section>
+
+        {/* ===== Favorito do Mês ===== */}
+        {highlight && (
+          <section className="space-y-3">
+            <h3 className="font-display text-sm text-glow-purple inline-flex items-center gap-2">
+              <Star className="size-4 text-neon-pink fill-neon-pink" /> FAVORITO DO MÊS
+            </h3>
+            <Link
+              to="/games/$id"
+              params={{ id: highlight.id }}
+              className="block relative overflow-hidden rounded-2xl border border-neon-pink/40 bg-card hover:border-neon-pink transition glow-pink"
+            >
+              <div className="grid sm:grid-cols-[200px_1fr] gap-0">
+                <div className="aspect-[3/4] sm:aspect-auto overflow-hidden bg-secondary">
+                  <img src={highlight.cover} alt={highlight.title} className="size-full object-cover" />
+                </div>
+                <div className="p-6 space-y-3 flex flex-col justify-center">
+                  <div className="font-display text-[10px] text-neon-pink tracking-widest">EM DESTAQUE</div>
+                  <div className="font-display text-2xl sm:text-3xl text-glow-pink">{highlight.title}</div>
+                  <div className="text-xs text-muted-foreground font-display">{highlight.year} · {highlight.genre} · ⭐ {highlight.rating}</div>
+                  <p className="text-sm text-foreground/85 line-clamp-3">{highlight.description}</p>
+                </div>
+              </div>
+            </Link>
+          </section>
+        )}
+
 
         {/* ===== Favoritos (4 slots) ===== */}
         <section className="space-y-3">
