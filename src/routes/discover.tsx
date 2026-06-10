@@ -1,211 +1,228 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { Sparkles } from "lucide-react";
+import { Sparkles, Filter, X } from "lucide-react";
 import { games, modernCategories, getGame, type Game } from "@/data/games";
 import { GameCard } from "@/components/GameCard";
 import { GameRow } from "@/components/GameRow";
+import { MoodAssistant } from "@/components/MoodAssistant";
 
 export const Route = createFileRoute("/discover")({
   head: () => ({
     meta: [
-      { title: "Descobrir Jogos Modernos — Pixel Store" },
-      { name: "description", content: "Tendências, lançamentos e recomendações de jogos modernos: Valorant, Fortnite, Elden Ring, CS2 e mais. Encontre seu próximo jogo pelo humor." },
+      { title: "Descobrir Jogos — Pixel Store" },
+      { name: "description", content: "IA de recomendação, tendências e filtros avançados para descobrir seu próximo jogo." },
     ],
   }),
   component: Discover,
 });
 
-// Apenas jogos modernos nessa página — a Home é dedicada aos clássicos.
-const modernGames = games.filter((g) => g.era === "modern");
-
-const moods = [
-  { id: "relaxar", label: "Quero relaxar", emoji: "🌙" },
-  { id: "competitivo", label: "Quero competir", emoji: "⚔️" },
-  { id: "história", label: "Uma boa história", emoji: "📖" },
-  { id: "desafio", label: "Um desafio brutal", emoji: "🔥" },
+const allDifficulties = [
+  { id: "easy", label: "Fácil" },
+  { id: "medium", label: "Médio" },
+  { id: "hard", label: "Difícil" },
 ] as const;
 
-const difficulties = [
-  { id: "easy", label: "Tranquilo" },
-  { id: "medium", label: "Equilibrado" },
-  { id: "hard", label: "Sem piedade" },
-] as const;
-
-const genres = Array.from(new Set(modernGames.map((g) => g.genre)));
+const allGenres = Array.from(new Set(games.map((g) => g.genre))).sort();
+const allPlatforms = Array.from(new Set(games.flatMap((g) => g.platforms))).sort();
+const years = games.map((g) => g.year);
+const MIN_YEAR = Math.min(...years);
+const MAX_YEAR = Math.max(...years);
 
 function Discover() {
-  const [mood, setMood] = useState<string | null>(null);
-  const [diff, setDiff] = useState<string | null>(null);
   const [genre, setGenre] = useState<string | null>(null);
+  const [platform, setPlatform] = useState<string | null>(null);
+  const [diff, setDiff] = useState<string | null>(null);
+  const [yearFrom, setYearFrom] = useState<number>(MIN_YEAR);
+  const [multiOnly, setMultiOnly] = useState(false);
+  const [minRating, setMinRating] = useState(0);
   const [query, setQuery] = useState("");
 
-  const filtersActive = Boolean(mood || diff || genre || query);
+  const filtersActive = Boolean(
+    genre || platform || diff || multiOnly || query || yearFrom > MIN_YEAR || minRating > 0,
+  );
 
   const results = useMemo(() => {
-    return modernGames.filter((g: Game) => {
-      if (mood && !g.mood.includes(mood as Game["mood"][number])) return false;
-      if (diff && g.difficulty !== diff) return false;
+    return games.filter((g: Game) => {
       if (genre && g.genre !== genre) return false;
+      if (platform && !g.platforms.includes(platform)) return false;
+      if (diff && g.difficulty !== diff) return false;
+      if (g.year < yearFrom) return false;
+      if (minRating && g.rating < minRating) return false;
+      if (multiOnly && !/multiplayer|co-?op|pvp|online|battle royale/i.test(`${g.tags.join(" ")} ${g.genre}`)) return false;
       if (query && !`${g.title} ${g.tags.join(" ")} ${g.genre}`.toLowerCase().includes(query.toLowerCase())) return false;
       return true;
     });
-  }, [mood, diff, genre, query]);
+  }, [genre, platform, diff, yearFrom, multiOnly, minRating, query]);
+
+  const reset = () => {
+    setGenre(null); setPlatform(null); setDiff(null);
+    setYearFrom(MIN_YEAR); setMultiOnly(false); setMinRating(0); setQuery("");
+  };
 
   return (
-    <div className="pt-24 pb-16 mx-auto max-w-7xl px-4 sm:px-6 space-y-12">
-      <header className="space-y-3">
+    <div className="pt-24 pb-16 space-y-12">
+      <header className="mx-auto max-w-7xl px-4 sm:px-6 space-y-3">
         <div className="inline-flex items-center gap-2 font-display text-xs text-neon-cyan">
-          <Sparkles className="size-3" /> DESCOBRIR · JOGOS MODERNOS
+          <Sparkles className="size-3" /> DESCOBRIR
         </div>
         <h1 className="font-display text-2xl sm:text-4xl text-glow-pink leading-tight">
-          O que está bombando agora,<br />e o que você devia jogar a seguir.
+          O que jogar a seguir.
         </h1>
         <p className="text-muted-foreground max-w-xl">
-          Tendências, lançamentos e recomendações personalizadas. Combine humor, dificuldade e gênero — quanto mais filtros, mais preciso o radar.
+          A IA pensa por você ou use os filtros avançados — combine gênero, plataforma, ano, dificuldade e mais.
         </p>
       </header>
 
-      {/* Tendências e categorias modernas */}
-      {!filtersActive && (
-        <div className="space-y-12 -mx-4 sm:-mx-6">
-          {modernCategories.map((c) => {
-            const list = c.ids.map((id) => getGame(id)!).filter(Boolean);
-            if (list.length === 0) return null;
-            return <GameRow key={c.slug} slug={c.slug} title={c.title} games={list} />;
-          })}
-        </div>
-      )}
+      {/* 1. IA no topo */}
+      <MoodAssistant />
 
-      {/* Mood Engine — Recomendação Personalizada em destaque, logo após as categorias */}
-      <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.5 }}
-        className="relative overflow-hidden rounded-3xl border border-neon-pink/30 bg-gradient-to-br from-neon-purple/10 via-card to-neon-cyan/5 p-6 sm:p-10 space-y-8 glow-pink"
-      >
-        <div className="absolute -top-24 -right-24 size-64 rounded-full bg-neon-pink/20 blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-24 -left-24 size-64 rounded-full bg-neon-cyan/20 blur-3xl pointer-events-none" />
+      {/* 2. Tendências curadas */}
+      <div className="space-y-12 -mx-0">
+        {modernCategories.map((c) => {
+          const list = c.ids.map((id) => getGame(id)!).filter(Boolean);
+          if (list.length === 0) return null;
+          return <GameRow key={c.slug} slug={c.slug} title={c.title} games={list} />;
+        })}
+      </div>
 
-        <div className="relative space-y-2">
-          <div className="inline-flex items-center gap-2 font-display text-xs text-neon-cyan">
-            <Sparkles className="size-3" /> MOOD ENGINE · v2.0
-          </div>
-          <h2 className="font-display text-2xl sm:text-3xl text-glow-pink">
-            Recomendação personalizada
-          </h2>
-          <p className="text-sm text-muted-foreground max-w-xl">
-            Combine humor, dificuldade e gênero — o radar fica mais preciso a cada filtro.
-          </p>
-        </div>
-
-        <input
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Pesquisar por nome, gênero, tag..."
-          className="w-full h-12 px-4 rounded-lg bg-secondary/60 border border-border focus:border-neon-pink focus:glow-pink outline-none transition"
-        />
-
-        <Section title="Como você está se sentindo?">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {moods.map((m) => (
-              <Pill key={m.id} active={mood === m.id} onClick={() => setMood(mood === m.id ? null : m.id)}>
-                <span className="text-xl">{m.emoji}</span>
-                <span className="text-sm">{m.label}</span>
-              </Pill>
-            ))}
-          </div>
-        </Section>
-
-        <Section title="Qual o nível de dor que aguenta hoje?">
-          <div className="flex flex-wrap gap-3">
-            {difficulties.map((d) => (
-              <Pill key={d.id} active={diff === d.id} onClick={() => setDiff(diff === d.id ? null : d.id)}>
-                <span className="text-sm">{d.label}</span>
-              </Pill>
-            ))}
-          </div>
-        </Section>
-
-        <Section title="Gênero favorito">
-          <div className="flex flex-wrap gap-2">
-            {genres.map((g) => (
-              <button
-                key={g}
-                onClick={() => setGenre(genre === g ? null : g)}
-                className={`px-3 h-9 rounded-full border text-xs font-medium transition ${
-                  genre === g
-                    ? "border-neon-cyan text-neon-cyan glow-cyan"
-                    : "border-border text-muted-foreground hover:border-neon-purple hover:text-foreground"
-                }`}
-              >
-                {g}
-              </button>
-            ))}
-          </div>
-        </Section>
-
-        <section className="space-y-4">
-          <div className="flex items-end justify-between">
-            <h2 className="font-display text-sm text-glow-purple">
-              {results.length} resultado{results.length === 1 ? "" : "s"}
+      {/* 3. Filtros avançados */}
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 space-y-6">
+        <div className="flex items-end justify-between gap-4 flex-wrap">
+          <div className="space-y-1">
+            <h2 className="font-display text-xl text-glow-cyan inline-flex items-center gap-2">
+              <Filter className="size-4" /> Filtros avançados
             </h2>
-            {filtersActive && (
-              <button
-                onClick={() => { setMood(null); setDiff(null); setGenre(null); setQuery(""); }}
-                className="text-xs text-neon-pink hover:text-glow-pink"
-              >
-                Limpar filtros
-              </button>
-            )}
+            <p className="text-sm text-muted-foreground">Combine quantos quiser. Reset a qualquer momento.</p>
+          </div>
+          {filtersActive && (
+            <button onClick={reset} className="inline-flex items-center gap-1 text-xs text-neon-pink hover:text-glow-pink">
+              <X className="size-3" /> Limpar tudo
+            </button>
+          )}
+        </div>
+
+        <div className="rounded-2xl border border-border bg-card p-5 sm:p-6 space-y-5">
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Buscar por nome, tag, gênero..."
+            className="w-full h-11 px-4 rounded-md bg-background border border-border focus:border-neon-cyan outline-none transition"
+          />
+
+          <div className="grid sm:grid-cols-2 gap-5">
+            <FilterGroup label="Gênero">
+              <Select value={genre} onChange={setGenre} options={allGenres} />
+            </FilterGroup>
+            <FilterGroup label="Plataforma">
+              <Select value={platform} onChange={setPlatform} options={allPlatforms} />
+            </FilterGroup>
           </div>
 
-          {results.length === 0 ? (
-            <div className="text-center py-20 border border-dashed border-border rounded-xl">
-              <div className="font-display text-neon-pink">GAME OVER</div>
-              <p className="text-muted-foreground text-sm mt-2">Nenhum jogo combina com esses filtros. Ajuste e tente novamente.</p>
-            </div>
-          ) : (
-            <motion.div
-              layout
-              className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"
-            >
-              {results.map((g) => (
-                <motion.div key={g.id} layout initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-                  <div className="[&>a]:!w-full">
-                    <GameCard game={g} />
-                  </div>
-                </motion.div>
+          <FilterGroup label="Dificuldade">
+            <div className="flex flex-wrap gap-2">
+              {allDifficulties.map((d) => (
+                <Chip key={d.id} active={diff === d.id} onClick={() => setDiff(diff === d.id ? null : d.id)}>
+                  {d.label}
+                </Chip>
               ))}
-            </motion.div>
-          )}
-        </section>
-      </motion.div>
+            </div>
+          </FilterGroup>
+
+          <FilterGroup label={`Lançado a partir de ${yearFrom}`}>
+            <input
+              type="range"
+              min={MIN_YEAR}
+              max={MAX_YEAR}
+              value={yearFrom}
+              onChange={(e) => setYearFrom(Number(e.target.value))}
+              className="w-full accent-neon-pink"
+            />
+            <div className="flex justify-between text-[10px] text-muted-foreground font-display">
+              <span>{MIN_YEAR}</span><span>{MAX_YEAR}</span>
+            </div>
+          </FilterGroup>
+
+          <FilterGroup label={`Nota mínima: ${minRating === 0 ? "qualquer" : minRating.toFixed(1)}`}>
+            <input
+              type="range"
+              min={0}
+              max={9.5}
+              step={0.5}
+              value={minRating}
+              onChange={(e) => setMinRating(Number(e.target.value))}
+              className="w-full accent-neon-cyan"
+            />
+          </FilterGroup>
+
+          <label className="flex items-center gap-2 text-sm cursor-pointer select-none">
+            <input type="checkbox" checked={multiOnly} onChange={(e) => setMultiOnly(e.target.checked)} className="accent-neon-pink size-4" />
+            Só multiplayer / co-op
+          </label>
+        </div>
+
+        <div className="flex items-baseline justify-between">
+          <h3 className="font-display text-sm text-glow-purple">
+            {results.length} resultado{results.length === 1 ? "" : "s"}
+          </h3>
+        </div>
+
+        {results.length === 0 ? (
+          <div className="text-center py-20 border border-dashed border-border rounded-xl">
+            <div className="font-display text-neon-pink">GAME OVER</div>
+            <p className="text-muted-foreground text-sm mt-2">Nenhum jogo combina com esses filtros.</p>
+          </div>
+        ) : (
+          <motion.div layout className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            {results.map((g) => (
+              <motion.div key={g.id} layout initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
+                <div className="[&>a]:!w-full">
+                  <GameCard game={g} />
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
+      </section>
     </div>
   );
 }
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+function FilterGroup({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <section className="space-y-3">
-      <h2 className="font-display text-xs sm:text-sm text-neon-pink">{title}</h2>
+    <div className="space-y-2">
+      <div className="font-display text-[10px] uppercase tracking-wider text-muted-foreground">{label}</div>
       {children}
-    </section>
+    </div>
   );
 }
 
-function Pill({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
+function Chip({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
   return (
     <button
       onClick={onClick}
-      className={`flex items-center gap-3 px-4 h-14 rounded-xl border transition text-left ${
+      className={`px-3 h-9 rounded-full border text-xs font-medium transition ${
         active
-          ? "border-neon-pink bg-neon-pink/10 text-foreground glow-pink"
-          : "border-border bg-card/60 hover:border-neon-purple hover:bg-card"
+          ? "border-neon-pink bg-neon-pink/15 text-neon-pink glow-pink"
+          : "border-border text-muted-foreground hover:border-neon-purple hover:text-foreground"
       }`}
     >
       {children}
     </button>
+  );
+}
+
+function Select({ value, onChange, options }: { value: string | null; onChange: (v: string | null) => void; options: string[] }) {
+  return (
+    <select
+      value={value ?? ""}
+      onChange={(e) => onChange(e.target.value || null)}
+      className="w-full h-10 px-3 rounded-md bg-background border border-border focus:border-neon-cyan outline-none text-sm"
+    >
+      <option value="">Todos</option>
+      {options.map((o) => (
+        <option key={o} value={o}>{o}</option>
+      ))}
+    </select>
   );
 }

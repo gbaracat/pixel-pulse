@@ -4,6 +4,7 @@ import { Loader2, Star, ListIcon, UserPlus, Users, Globe, Heart, Gamepad2, Troph
 import { useFeed, type FeedItem, type FeedProfile } from "@/hooks/use-feed";
 import { useAuth } from "@/hooks/use-auth";
 import { games } from "@/data/games";
+import { useEnrichedGame } from "@/hooks/use-enriched-games";
 
 export const Route = createFileRoute("/feed")({
   head: () => ({
@@ -34,7 +35,7 @@ function FeedPage() {
       <div className="space-y-1">
         <div className="font-display text-xs text-neon-cyan">COMUNIDADE</div>
         <h1 className="font-display text-3xl sm:text-4xl text-glow-pink">Feed</h1>
-        <p className="text-sm text-muted-foreground">Acompanhe reviews, listas e quem está seguindo quem.</p>
+        <p className="text-sm text-muted-foreground">Reviews, listas e quem está jogando o quê.</p>
       </div>
 
       <div className="flex gap-1 border-b border-border">
@@ -61,7 +62,7 @@ function FeedPage() {
             : "Nenhuma atividade ainda. Seja o primeiro a publicar uma review."}
         </EmptyState>
       ) : (
-        <ul className="space-y-3">
+        <ul className="space-y-4">
           {data.items.map((item) => (
             <FeedRow key={`${item.kind}-${item.id}`} item={item} profiles={data.profiles} />
           ))}
@@ -93,95 +94,111 @@ function EmptyState({ children }: { children: React.ReactNode }) {
   );
 }
 
-function ProfileLink({ p, fallbackId }: { p: FeedProfile | undefined; fallbackId: string }) {
+function ProfileChip({ p, fallbackId, size = "sm" }: { p: FeedProfile | undefined; fallbackId: string; size?: "sm" | "md" }) {
   const name = p?.display_name || p?.username || "Player";
   const slug = p?.username || fallbackId;
+  const dim = size === "md" ? "size-9 text-xs" : "size-7 text-[10px]";
   return (
-    <Link to="/u/$username" params={{ username: slug }} className="inline-flex items-center gap-2 group">
-      <div className="size-7 rounded-full overflow-hidden bg-gradient-to-br from-neon-purple to-neon-pink grid place-items-center text-[10px] font-display text-background">
+    <Link to="/u/$username" params={{ username: slug }} className="inline-flex items-center gap-2 group min-w-0">
+      <div className={`${dim} rounded-full overflow-hidden bg-gradient-to-br from-neon-purple to-neon-pink grid place-items-center font-display text-background shrink-0`}>
         {p?.avatar_url ? <img src={p.avatar_url} alt={name} className="size-full object-cover" /> : name.slice(0, 2).toUpperCase()}
       </div>
-      <span className="text-sm font-medium group-hover:text-neon-cyan transition">{name}</span>
+      <span className="text-sm font-medium group-hover:text-neon-cyan transition truncate">{name}</span>
     </Link>
   );
 }
 
 function FeedRow({ item, profiles }: { item: FeedItem; profiles: Map<string, FeedProfile> }) {
   const p = profiles.get(item.user_id);
+
+  // Reviews ganham card visual grande estilo Letterboxd
+  if (item.kind === "review") return <ReviewCardBig item={item} profile={p} time={timeAgo(item.created_at)} />;
+  if (item.kind === "status") return <StatusCardBig item={item} profile={p} time={timeAgo(item.created_at)} />;
+
   return (
     <li className="rounded-xl border border-border bg-card p-4 hover:border-neon-cyan/40 transition">
       <div className="flex items-center justify-between gap-2 mb-3">
-        <ProfileLink p={p} fallbackId={item.user_id} />
+        <ProfileChip p={p} fallbackId={item.user_id} />
         <span className="text-[11px] text-muted-foreground">{timeAgo(item.created_at)}</span>
       </div>
-      {item.kind === "review" && <ReviewItem item={item} />}
       {item.kind === "list" && <ListItem item={item} />}
       {item.kind === "follow" && <FollowItem item={item} profiles={profiles} />}
-      {item.kind === "status" && <StatusItem item={item} />}
     </li>
   );
 }
 
-const STATUS_META: Record<string, { label: string; icon: React.ReactNode; color: string }> = {
-  favorite: { label: "favoritou", icon: <Heart className="size-4 fill-neon-pink text-neon-pink" />, color: "text-neon-pink" },
-  playing: { label: "começou a jogar", icon: <Gamepad2 className="size-4 text-neon-cyan" />, color: "text-neon-cyan" },
-  completed: { label: "terminou", icon: <Trophy className="size-4 text-neon-cyan" />, color: "text-neon-cyan" },
-  wishlist: { label: "adicionou à wishlist", icon: <Bookmark className="size-4 text-neon-purple" />, color: "text-neon-purple" },
-  abandoned: { label: "abandonou", icon: <XCircle className="size-4 text-muted-foreground" />, color: "text-muted-foreground" },
+const STATUS_META: Record<string, { label: string; icon: React.ReactNode; color: string; bg: string }> = {
+  favorite: { label: "favoritou", icon: <Heart className="size-3.5 fill-current" />, color: "text-neon-pink", bg: "bg-neon-pink/15 border-neon-pink/40" },
+  playing: { label: "começou a jogar", icon: <Gamepad2 className="size-3.5" />, color: "text-neon-cyan", bg: "bg-neon-cyan/15 border-neon-cyan/40" },
+  completed: { label: "zerou", icon: <Trophy className="size-3.5" />, color: "text-neon-cyan", bg: "bg-neon-cyan/15 border-neon-cyan/40" },
+  wishlist: { label: "adicionou à wishlist", icon: <Bookmark className="size-3.5" />, color: "text-neon-purple", bg: "bg-neon-purple/15 border-neon-purple/40" },
+  abandoned: { label: "abandonou", icon: <XCircle className="size-3.5" />, color: "text-muted-foreground", bg: "bg-muted/30 border-border" },
 };
 
-function StatusItem({ item }: { item: Extract<FeedItem, { kind: "status" }> }) {
-  const game = games.find((g) => g.id === item.game_id);
-  const meta = STATUS_META[item.status] ?? STATUS_META.playing;
+function GameCover({ gameId, className = "" }: { gameId: string; className?: string }) {
+  const game = games.find((g) => g.id === gameId);
+  const enriched = useEnrichedGame(gameId);
+  if (!game) return null;
+  const cover = enriched?.cover ?? game.cover;
   return (
-    <div className="flex gap-3 items-center">
-      {game && (
-        <Link to="/games/$id" params={{ id: game.id }} className="shrink-0">
-          <img src={game.cover} alt={game.title} className="w-12 h-16 object-cover rounded-md border border-border" />
-        </Link>
-      )}
-      <div className="flex-1 min-w-0 flex items-center gap-2 text-sm">
-        {meta.icon}
-        <span className={meta.color}>{meta.label}</span>
-        {game ? (
-          <Link to="/games/$id" params={{ id: game.id }} className="font-semibold hover:text-neon-cyan truncate">
-            {game.title}
-          </Link>
-        ) : (
-          <span className="font-semibold truncate">{item.game_id}</span>
-        )}
-      </div>
-    </div>
+    <Link to="/games/$id" params={{ id: gameId }} className={`block shrink-0 overflow-hidden rounded-lg border border-border hover:border-neon-cyan/50 transition ${className}`}>
+      <img src={cover} alt={game.title} className="size-full object-cover" loading="lazy" />
+    </Link>
   );
 }
 
-function ReviewItem({ item }: { item: Extract<FeedItem, { kind: "review" }> }) {
+function ReviewCardBig({ item, profile, time }: { item: Extract<FeedItem, { kind: "review" }>; profile: FeedProfile | undefined; time: string }) {
   const game = games.find((g) => g.id === item.game_id);
   return (
-    <div className="flex gap-3">
-      {game && (
-        <Link to="/games/$id" params={{ id: game.id }} className="shrink-0">
-          <img src={game.cover} alt={game.title} className="w-16 h-20 object-cover rounded-md border border-border" />
-        </Link>
-      )}
-      <div className="flex-1 min-w-0 space-y-1.5">
-        <div className="text-sm">
-          Avaliou{" "}
-          {game ? (
-            <Link to="/games/$id" params={{ id: game.id }} className="font-semibold hover:text-neon-cyan">
+    <li className="rounded-xl overflow-hidden border border-border bg-card hover:border-neon-pink/40 transition">
+      <div className="flex">
+        <GameCover gameId={item.game_id} className="w-28 sm:w-36 aspect-[3/4] rounded-none border-0 border-r border-border" />
+        <div className="flex-1 min-w-0 p-4 space-y-3">
+          <div className="flex items-center justify-between gap-2">
+            <ProfileChip p={profile} fallbackId={item.user_id} />
+            <span className="text-[11px] text-muted-foreground shrink-0">{time}</span>
+          </div>
+          {game && (
+            <Link to="/games/$id" params={{ id: game.id }} className="block">
+              <div className="font-display text-base sm:text-lg text-foreground hover:text-neon-cyan transition truncate">{game.title}</div>
+              <div className="text-[10px] text-muted-foreground font-display">{game.year} · {game.genre}</div>
+            </Link>
+          )}
+          <div className="inline-flex items-center gap-1 text-sm font-display text-neon-cyan">
+            <Star className="size-4 fill-neon-cyan text-neon-cyan" />
+            <span className="text-glow-cyan">{item.rating}</span>
+            <span className="text-muted-foreground">/10</span>
+          </div>
+          {item.body && <p className="text-sm text-foreground/85 line-clamp-3 italic">"{item.body}"</p>}
+        </div>
+      </div>
+    </li>
+  );
+}
+
+function StatusCardBig({ item, profile, time }: { item: Extract<FeedItem, { kind: "status" }>; profile: FeedProfile | undefined; time: string }) {
+  const game = games.find((g) => g.id === item.game_id);
+  const meta = STATUS_META[item.status] ?? STATUS_META.playing;
+  return (
+    <li className="rounded-xl overflow-hidden border border-border bg-card hover:border-neon-purple/40 transition">
+      <div className="flex">
+        <GameCover gameId={item.game_id} className="w-24 sm:w-28 aspect-[3/4] rounded-none border-0 border-r border-border" />
+        <div className="flex-1 min-w-0 p-4 flex flex-col justify-center gap-2">
+          <div className="flex items-center justify-between gap-2">
+            <ProfileChip p={profile} fallbackId={item.user_id} />
+            <span className="text-[11px] text-muted-foreground shrink-0">{time}</span>
+          </div>
+          <div className={`inline-flex items-center gap-1.5 px-2 h-6 w-fit rounded-full border text-[11px] font-display ${meta.bg} ${meta.color}`}>
+            {meta.icon} {meta.label.toUpperCase()}
+          </div>
+          {game && (
+            <Link to="/games/$id" params={{ id: game.id }} className="font-display text-base hover:text-neon-cyan transition truncate">
               {game.title}
             </Link>
-          ) : (
-            <span className="font-semibold">{item.game_id}</span>
           )}
         </div>
-        <div className="inline-flex items-center gap-1 text-xs font-display text-neon-cyan">
-          <Star className="size-3.5 fill-neon-cyan text-neon-cyan" />
-          {item.rating}/10
-        </div>
-        {item.body && <p className="text-sm text-foreground/90 line-clamp-3">{item.body}</p>}
       </div>
-    </div>
+    </li>
   );
 }
 
@@ -208,7 +225,7 @@ function FollowItem({ item, profiles }: { item: Extract<FeedItem, { kind: "follo
     <div className="flex items-center gap-2 text-sm">
       <UserPlus className="size-4 text-neon-cyan" />
       <span>Começou a seguir</span>
-      <ProfileLink p={target} fallbackId={item.target_user_id} />
+      <ProfileChip p={target} fallbackId={item.target_user_id} />
     </div>
   );
 }

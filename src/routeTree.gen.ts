@@ -20,6 +20,7 @@ import { Route as ListsIndexRouteImport } from './routes/lists.index'
 import { Route as UUsernameRouteImport } from './routes/u.$username'
 import { Route as ListsIdRouteImport } from './routes/lists.$id'
 import { Route as GamesIdRouteImport } from './routes/games.$id'
+import { Route as FranchiseSlugRouteImport } from './routes/franchise.$slug'
 import { Route as DecadeSlugRouteImport } from './routes/decade.$slug'
 import { Route as CategoriesSlugRouteImport } from './routes/categories.$slug'
 import { Route as AuthSteamReturnRouteImport } from './routes/auth.steam.return'
@@ -80,6 +81,11 @@ const GamesIdRoute = GamesIdRouteImport.update({
   path: '/games/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FranchiseSlugRoute = FranchiseSlugRouteImport.update({
+  id: '/franchise/$slug',
+  path: '/franchise/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DecadeSlugRoute = DecadeSlugRouteImport.update({
   id: '/decade/$slug',
   path: '/decade/$slug',
@@ -111,6 +117,7 @@ export interface FileRoutesByFullPath {
   '/search': typeof SearchRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/decade/$slug': typeof DecadeSlugRoute
+  '/franchise/$slug': typeof FranchiseSlugRoute
   '/games/$id': typeof GamesIdRoute
   '/lists/$id': typeof ListsIdRoute
   '/u/$username': typeof UUsernameRoute
@@ -128,6 +135,7 @@ export interface FileRoutesByTo {
   '/search': typeof SearchRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/decade/$slug': typeof DecadeSlugRoute
+  '/franchise/$slug': typeof FranchiseSlugRoute
   '/games/$id': typeof GamesIdRoute
   '/lists/$id': typeof ListsIdRoute
   '/u/$username': typeof UUsernameRoute
@@ -146,6 +154,7 @@ export interface FileRoutesById {
   '/search': typeof SearchRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/decade/$slug': typeof DecadeSlugRoute
+  '/franchise/$slug': typeof FranchiseSlugRoute
   '/games/$id': typeof GamesIdRoute
   '/lists/$id': typeof ListsIdRoute
   '/u/$username': typeof UUsernameRoute
@@ -165,6 +174,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/categories/$slug'
     | '/decade/$slug'
+    | '/franchise/$slug'
     | '/games/$id'
     | '/lists/$id'
     | '/u/$username'
@@ -182,6 +192,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/categories/$slug'
     | '/decade/$slug'
+    | '/franchise/$slug'
     | '/games/$id'
     | '/lists/$id'
     | '/u/$username'
@@ -199,6 +210,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/categories/$slug'
     | '/decade/$slug'
+    | '/franchise/$slug'
     | '/games/$id'
     | '/lists/$id'
     | '/u/$username'
@@ -217,6 +229,7 @@ export interface RootRouteChildren {
   SearchRoute: typeof SearchRoute
   CategoriesSlugRoute: typeof CategoriesSlugRoute
   DecadeSlugRoute: typeof DecadeSlugRoute
+  FranchiseSlugRoute: typeof FranchiseSlugRoute
   GamesIdRoute: typeof GamesIdRoute
   ListsIdRoute: typeof ListsIdRoute
   UUsernameRoute: typeof UUsernameRoute
@@ -304,6 +317,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GamesIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/franchise/$slug': {
+      id: '/franchise/$slug'
+      path: '/franchise/$slug'
+      fullPath: '/franchise/$slug'
+      preLoaderRoute: typeof FranchiseSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/decade/$slug': {
       id: '/decade/$slug'
       path: '/decade/$slug'
@@ -345,6 +365,7 @@ const rootRouteChildren: RootRouteChildren = {
   SearchRoute: SearchRoute,
   CategoriesSlugRoute: CategoriesSlugRoute,
   DecadeSlugRoute: DecadeSlugRoute,
+  FranchiseSlugRoute: FranchiseSlugRoute,
   GamesIdRoute: GamesIdRoute,
   ListsIdRoute: ListsIdRoute,
   UUsernameRoute: UUsernameRoute,
@@ -355,13 +376,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

@@ -10,6 +10,7 @@ import { useTrailer, toEmbedUrl } from "@/hooks/use-trailer";
 import { useGameReviews, useMyReview, useGameRatingAvg } from "@/hooks/use-reviews";
 import { ReviewForm } from "@/components/ReviewForm";
 import { ReviewCard } from "@/components/ReviewCard";
+import { SteamOwnedBadge } from "@/components/SteamOwnedBadge";
 
 export const Route = createFileRoute("/games/$id")({
   loader: ({ params }) => {
@@ -115,8 +116,9 @@ function GamePage() {
                 </div>
               )}
             </div>
-            <div className="pt-2">
+            <div className="pt-2 flex flex-wrap items-center gap-3">
               <GameActions gameId={game.id} />
+              <SteamOwnedBadge gameId={game.id} />
             </div>
           </motion.div>
         </div>
