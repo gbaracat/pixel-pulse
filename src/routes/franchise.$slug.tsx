@@ -44,12 +44,13 @@ const accentMap = {
 };
 
 function FranchisePage() {
-  const { franchise } = Route.useLoaderData();
+  const loaderData = Route.useLoaderData() as { franchise: import("@/lib/franchises").Franchise };
+  const franchise = loaderData.franchise;
   const accent = accentMap[franchise.accent];
 
   const games = franchise.gameIds
-    .map((id) => getGame(id))
-    .filter((g): g is NonNullable<typeof g> => Boolean(g))
+    .map((id: string) => getGame(id))
+    .filter((g): g is NonNullable<ReturnType<typeof getGame>> => Boolean(g))
     .sort((a, b) => a.year - b.year);
 
   const others = FRANCHISES.filter((f) => f.slug !== franchise.slug).slice(0, 4);
@@ -75,7 +76,7 @@ function FranchisePage() {
             <Calendar className="size-4" /> LINHA DO TEMPO
           </h2>
           <ol className="relative space-y-6 before:absolute before:left-[19px] before:top-2 before:bottom-2 before:w-px before:bg-border">
-            {games.map((g) => (
+            {games.map((g: NonNullable<ReturnType<typeof getGame>>) => (
               <TimelineItem key={g.id} gameId={g.id} year={g.year} title={g.title} accentChip={accent.chip} />
             ))}
           </ol>
@@ -84,7 +85,7 @@ function FranchisePage() {
         <section className="space-y-4">
           <h3 className="font-display text-sm text-glow-purple">Todos os jogos da franquia</h3>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-            {games.map((g) => (
+            {games.map((g: NonNullable<ReturnType<typeof getGame>>) => (
               <div key={g.id} className="[&>a]:!w-full">
                 <GameCard game={g} />
               </div>
